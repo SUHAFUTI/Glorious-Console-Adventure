@@ -143,10 +143,11 @@ namespace GloriousConsoleAdventure
                                             PercentAreWalls.ToString(),
                                             Environment.NewLine
                                            );
-
+            //0 empty, 1 wall, 
             List<string> mapSymbols = new List<string>();
-            mapSymbols.Add(".");
-            mapSymbols.Add("#");
+            mapSymbols.Add(" ");
+            //alt + 219 = █
+            mapSymbols.Add("█");
             mapSymbols.Add("+");
 
             for (int column = 0, row = 0; row < MapHeight; row++)
@@ -241,6 +242,22 @@ namespace GloriousConsoleAdventure
                 return 1;
             }
             return 0;
+        }
+        /// <summary>
+        /// Used to get a valid start position. E.g. NOT in an wall! 
+        /// </summary>
+        /// <returns>Coordinate of first valid position</returns>
+        public int[] GetValidStartLocation()
+        {
+            for (int column = 0, row = 0; row < MapHeight; row++)
+            {
+                for (column = 0; column < MapWidth; column++)
+                {
+                    if (Map[column, row] == 0) return new[] { column, row };
+                }
+            }
+            return null;
+
         }
     }
 }

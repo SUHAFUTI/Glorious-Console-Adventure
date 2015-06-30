@@ -8,18 +8,18 @@ namespace GloriousConsoleAdventure
 {
     class Program
     {
-        const ConsoleColor HERO_COLOR = ConsoleColor.DarkBlue;
-        const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Green;
+        const ConsoleColor HERO_COLOR = ConsoleColor.Cyan;
+        const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
 
-        public static Coordinate Hero { get; set; } //Will represent our here that's moving around :P/>
+        public static Coordinate Hero { get; set; } //Will represent our hero that's moving around :P/>
 
         static void Main(string[] args)
         {
             //Console.SetWindowSize(10,10);
-            InitGame();
             var map = new MapHandler();
             map.MakeCaverns();
             map.PrintMap();
+            InitGame(map.GetValidStartLocation());
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
@@ -107,15 +107,28 @@ namespace GloriousConsoleAdventure
         /// Initiates the game by painting the background
         /// and initiating the hero
         /// </summary>
-        static void InitGame()
+        static void InitGame(int [] startPosition = null)
         {
-            SetBackgroundColor();
+            //We don't need this when we used a map generator
+           // SetBackgroundColor();
 
-            Hero = new Coordinate()
+
+            if (startPosition == null)
             {
-                X = 0,
-                Y = 0
-            };
+                Hero = new Coordinate()
+                {
+                    X = 0,
+                    Y = 0
+                };
+            }
+            else
+            {
+                Hero = new Coordinate
+                {
+                    X = startPosition[0],
+                    Y = startPosition[1]
+                };
+            }
 
             MoveHero(0, 0);
 
