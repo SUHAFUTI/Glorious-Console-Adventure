@@ -15,9 +15,11 @@ namespace GloriousConsoleAdventure
 
         static void Main(string[] args)
         {
-            Console.SetWindowSize(10,10);
+            //Console.SetWindowSize(10,10);
             InitGame();
-
+            var map = new MapHandler();
+            map.MakeCaverns();
+            map.PrintMap();
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
