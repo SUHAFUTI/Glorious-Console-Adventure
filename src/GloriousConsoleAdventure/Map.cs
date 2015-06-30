@@ -93,7 +93,7 @@ namespace GloriousConsoleAdventure
             return wallCounter;
         }
 
-        bool IsWall(int x, int y)
+        public bool IsWall(int x, int y)
         {
             // Consider out-of-bound a wall
             if (IsOutOfBounds(x, y))
@@ -244,7 +244,7 @@ namespace GloriousConsoleAdventure
             return 0;
         }
         /// <summary>
-        /// Used to get a valid start position. E.g. NOT in an wall! 
+        /// Used to get a valid start position. E.g. NOT in a wall! 
         /// </summary>
         /// <returns>Coordinate of first valid position</returns>
         public int[] GetValidStartLocation()

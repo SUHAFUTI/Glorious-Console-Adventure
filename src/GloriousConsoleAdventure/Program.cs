@@ -10,16 +10,16 @@ namespace GloriousConsoleAdventure
     {
         const ConsoleColor HERO_COLOR = ConsoleColor.Cyan;
         const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
-
+        static readonly MapHandler _map = new MapHandler();
         public static Coordinate Hero { get; set; } //Will represent our hero that's moving around :P/>
 
         static void Main(string[] args)
         {
             //Console.SetWindowSize(10,10);
-            var map = new MapHandler();
-            map.MakeCaverns();
-            map.PrintMap();
-            InitGame(map.GetValidStartLocation());
+            //var map = new MapHandler();
+            _map.MakeCaverns();
+            _map.PrintMap();
+            InitGame(_map.GetValidStartLocation());
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
@@ -81,6 +81,7 @@ namespace GloriousConsoleAdventure
         /// </summary>
         static bool CanMove(Coordinate c)
         {
+            if(_map.IsWall(c.X,c.Y)) return false;
             if (c.X < 0 || c.X >= Console.WindowWidth)
                 return false;
 
