@@ -10,12 +10,12 @@ namespace GloriousConsoleAdventure
     {
         const ConsoleColor HERO_COLOR = ConsoleColor.Cyan;
         const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
-        static readonly MapHandler _map = new MapHandler();
+        static readonly MapHandler _map = new MapHandler(40,30);
         public static Coordinate Hero { get; set; } //Will represent our hero that's moving around :P/>
 
         static void Main(string[] args)
         {
-            //Console.SetWindowSize(10,10);
+            Console.SetWindowSize(80,30);
             //var map = new MapHandler();
             _map.MakeCaverns();
             _map.PrintMap();

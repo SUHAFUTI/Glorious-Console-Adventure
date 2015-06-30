@@ -167,6 +167,14 @@ namespace GloriousConsoleAdventure
             this.PercentAreWalls = percentWalls;
             this.Map = map;
         }
+        public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40)
+        {
+            this.MapWidth = mapWidth;
+            this.MapHeight = mapHeight;
+            this.PercentAreWalls = percentWalls;
+            Map = new int[MapWidth, MapHeight];
+            RandomFillMap();
+        }
 
         public MapHandler()
         {
