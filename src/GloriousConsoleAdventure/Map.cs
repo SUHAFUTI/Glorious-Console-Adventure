@@ -14,6 +14,8 @@
 
 using System;
 using System.Collections.Generic;
+using GloriousConsoleAdventure.Enums;
+using GloriousConsoleAdventure.Models;
 
 namespace GloriousConsoleAdventure
 {
@@ -26,7 +28,7 @@ namespace GloriousConsoleAdventure
         public int MapHeight { get; set; }
         public int PercentAreWalls { get; set; }
 
-        public int[,] Map;
+        public Block[,] Map;
         public void MakeCaverns()
         {
             // By initilizing column in the outter loop, its only created ONCE
@@ -38,20 +40,20 @@ namespace GloriousConsoleAdventure
                 }
             }
         }
-        public int PlaceWallLogic(int x, int y)
+        public Block PlaceWallLogic(int x, int y)
         {
             int numWalls = GetAdjacentWalls(x, y, 1, 1);
 
 
-            if (Map[x, y] == 1)
+            if (Map[x, y] == Block.Wall)
             {
                 if (numWalls >= 4)
                 {
-                    return 1;
+                    return Block.Wall;
                 }
                 if (numWalls < 2)
                 {
-                    return 0;
+                    return Block.EmptySpace;
                 }
 
             }
@@ -59,10 +61,23 @@ namespace GloriousConsoleAdventure
             {
                 if (numWalls >= 5)
                 {
-                    return 1;
+                    return Block.Wall;
                 }
             }
-            return 0;
+            return Block.EmptySpace;
+        }
+
+        public void PlaceRandomCoin()
+        {
+            var randX = rand.Next(1, MapWidth);
+            var randY = rand.Next(1, MapHeight);
+            while (IsWall(randX,randY))
+            {
+                randX = rand.Next(1, MapWidth);
+                randY = rand.Next(1, MapHeight);
+            }
+            
+            Map[randX,randY] = Block.Coin;
         }
 
         public int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
@@ -101,12 +116,12 @@ namespace GloriousConsoleAdventure
                 return true;
             }
 
-            if (Map[x, y] == 1)
+            if (Map[x, y] == Block.Wall)
             {
                 return true;
             }
 
-            if (Map[x, y] == 0)
+            if (Map[x, y] == Block.EmptySpace)
             {
                 return false;
             }
@@ -148,19 +163,20 @@ namespace GloriousConsoleAdventure
             mapSymbols.Add(" ");
             //alt + 219 = █
             mapSymbols.Add("█");
+            mapSymbols.Add("ò");
             mapSymbols.Add("+");
 
             for (int column = 0, row = 0; row < MapHeight; row++)
             {
                 for (column = 0; column < MapWidth; column++)
                 {
-                    returnString += mapSymbols[Map[column, row]];
+                    returnString += mapSymbols[(int)Map[column, row]];
                 }
                 returnString += Environment.NewLine;
             }
             return returnString;
         }
-        public MapHandler(int mapWidth, int mapHeight, int[,] map, int percentWalls = 40)
+        public MapHandler(int mapWidth, int mapHeight, Block[,] map, int percentWalls = 40)
         {
             this.MapWidth = mapWidth;
             this.MapHeight = mapHeight;
@@ -172,7 +188,7 @@ namespace GloriousConsoleAdventure
             this.MapWidth = mapWidth;
             this.MapHeight = mapHeight;
             this.PercentAreWalls = percentWalls;
-            Map = new int[MapWidth, MapHeight];
+            Map = new Block[MapWidth, MapHeight];
             RandomFillMap();
         }
 
@@ -182,7 +198,7 @@ namespace GloriousConsoleAdventure
             MapHeight = 21;
             PercentAreWalls = 40;
 
-            Map = new int[MapWidth, MapHeight];
+            Map = new Block[MapWidth, MapHeight];
 
             RandomFillMap();
         }
@@ -198,10 +214,12 @@ namespace GloriousConsoleAdventure
             }
         }
 
+
+
         public void RandomFillMap()
         {
             // New, empty map
-            Map = new int[MapWidth, MapHeight];
+            Map = new Block[MapWidth, MapHeight];
 
             int mapMiddle = 0; // Temp variable
             for (int column = 0, row = 0; row < MapHeight; row++)
@@ -211,19 +229,19 @@ namespace GloriousConsoleAdventure
                     // If coordinants lie on the the edge of the map (creates a border)
                     if (column == 0)
                     {
-                        Map[column, row] = 1;
+                        Map[column, row] = Block.Wall;
                     }
                     else if (row == 0)
                     {
-                        Map[column, row] = 1;
+                        Map[column, row] = Block.Wall;
                     }
                     else if (column == MapWidth - 1)
                     {
-                        Map[column, row] = 1;
+                        Map[column, row] = Block.Wall;
                     }
                     else if (row == MapHeight - 1)
                     {
-                        Map[column, row] = 1;
+                        Map[column, row] = Block.Wall;
                     }
                     // Else, fill with a wall a random percent of the time
                     else
@@ -243,13 +261,13 @@ namespace GloriousConsoleAdventure
             }
         }
 
-        int RandomPercent(int percent)
+        Block RandomPercent(int percent)
         {
             if (percent >= rand.Next(1, 101))
             {
-                return 1;
+                return Block.Wall;
             }
-            return 0;
+            return Block.EmptySpace;
         }
         /// <summary>
         /// Used to get a valid start position. E.g. NOT in a wall! 

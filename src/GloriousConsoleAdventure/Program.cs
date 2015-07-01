@@ -18,6 +18,7 @@ namespace GloriousConsoleAdventure
             Console.SetWindowSize(80,30);
             //var map = new MapHandler();
             _map.MakeCaverns();
+            _map.PlaceRandomCoin();
             _map.PrintMap();
             InitGame(_map.GetValidStartLocation());
             ConsoleKeyInfo keyInfo;
