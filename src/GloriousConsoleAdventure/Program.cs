@@ -76,6 +76,10 @@ namespace GloriousConsoleAdventure
             }
         }
 
+        /// <summary>
+        /// This is a method that checks if a block is hit and what action to run
+        /// </summary>
+        /// <param name="coordinate"></param>
         private static void BlockAction(Coordinate coordinate)
         {
             var block = _map.GetCurrentBlock(coordinate.X, coordinate.Y);
