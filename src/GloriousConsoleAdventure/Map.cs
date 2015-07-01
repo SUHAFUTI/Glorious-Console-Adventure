@@ -158,19 +158,12 @@ namespace GloriousConsoleAdventure
                                             PercentAreWalls.ToString(),
                                             Environment.NewLine
                                            );
-            //0 empty, 1 wall, 
-            List<string> mapSymbols = new List<string>();
-            mapSymbols.Add(" ");
-            //alt + 219 = █
-            mapSymbols.Add("█");
-            mapSymbols.Add("ò");
-            mapSymbols.Add("+");
-
+           
             for (int column = 0, row = 0; row < MapHeight; row++)
             {
                 for (column = 0; column < MapWidth; column++)
                 {
-                    returnString += mapSymbols[(int)Map[column, row]];
+                    returnString += Rendering.MapSymbols[Map[column, row]];
                 }
                 returnString += Environment.NewLine;
             }
