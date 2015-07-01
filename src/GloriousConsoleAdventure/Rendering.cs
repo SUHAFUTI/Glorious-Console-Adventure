@@ -16,7 +16,8 @@ namespace GloriousConsoleAdventure
         {
             {Block.EmptySpace, " "},
             {Block.Wall, "█"}, //alt + 219 = █
-            {Block.Coin, "ò"}
+            {Block.Coin, "ò"},
+            {Block.Teleport, "T"}
         };
 
     }
