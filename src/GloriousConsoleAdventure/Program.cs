@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GloriousConsoleAdventure.Enums;
 
 namespace GloriousConsoleAdventure
 {
@@ -15,10 +16,11 @@ namespace GloriousConsoleAdventure
 
         static void Main(string[] args)
         {
+
             Console.SetWindowSize(80,30);
             //var map = new MapHandler();
             _map.MakeCaverns();
-            _map.PlaceRandomCoin();
+            PopulateMapWithBlocks();
             _map.PrintMap();
             InitGame(_map.GetValidStartLocation());
             ConsoleKeyInfo keyInfo;
@@ -45,6 +47,13 @@ namespace GloriousConsoleAdventure
             }
         }
 
+        static void PopulateMapWithBlocks()
+        {
+            _map.PlaceRandomBlock(Block.Coin);
+            _map.PlaceRandomBlock(Block.Teleport);
+            _map.PlaceRandomBlock(Block.Teleport);
+        }
+
         /// <summary>
         /// Paint the new hero
         /// </summary>
@@ -63,7 +72,29 @@ namespace GloriousConsoleAdventure
                 Console.SetCursorPosition(newHero.X, newHero.Y);
                 Console.Write(" ");
                 Hero = newHero;
+                BlockAction(newHero);
             }
+        }
+
+        private static void BlockAction(Coordinate coordinate)
+        {
+            var block = _map.GetCurrentBlock(coordinate.X, coordinate.Y);
+            
+            switch (block)
+            {
+                case Block.Coin:
+                    var coinPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Coin + ".wav";
+                    var coinPlayer = new System.Media.SoundPlayer(coinPath);
+                    coinPlayer.Play();
+                    break;
+                case Block.Teleport:
+                    var teleportPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Teleport + ".wav";
+                    var teleportPlayer = new System.Media.SoundPlayer(teleportPath);
+                    teleportPlayer.Play();
+                    //TODO teleport
+                    break;
+            }
+
         }
 
         /// <summary>
