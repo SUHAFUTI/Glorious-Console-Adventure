@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GloriousConsoleAdventure.Enums;
 
 namespace GloriousConsoleAdventure
 {
@@ -11,8 +12,14 @@ namespace GloriousConsoleAdventure
         public static void DrawThisMapPlease(MapHandler map)
         {
             map.MakeCaverns();
-            map.PlaceRandomCoin();
+            PopulateMapWithBlocks(map);
             map.PrintMap();
+        }
+        static void PopulateMapWithBlocks(MapHandler map)
+        {
+            map.PlaceRandomBlock(Block.Coin);
+            map.PlaceRandomBlock(Block.Teleport);
+            map.PlaceRandomBlock(Block.Teleport);
         }
     }
 }
