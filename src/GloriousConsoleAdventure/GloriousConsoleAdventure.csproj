@@ -43,11 +43,13 @@
   <ItemGroup>
     <Compile Include="Enums\Block.cs" />
     <Compile Include="Enums\BlockType.cs" />
+    <Compile Include="Enums\Directions.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Rendering.cs" />
     <Compile Include="Models\MapTile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TheCartographer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
