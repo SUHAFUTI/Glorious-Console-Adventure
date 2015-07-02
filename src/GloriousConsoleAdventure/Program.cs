@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Mapping;
+using GloriousConsoleAdventure.Models.Hero;
 
 namespace GloriousConsoleAdventure
 {
@@ -15,11 +16,12 @@ namespace GloriousConsoleAdventure
         static readonly MapHandler _map = new MapHandler(40, 30);
         static readonly MapHandler _map2 = new MapHandler(40, 30);
         private static MapHandler _currentMap;
-        public static Coordinate Hero { get; set; } //Will represent our hero that's moving around :P/>
+        public static Hero Hero { get; set; } 
 
         static void Main(string[] args)
         {
-
+            //Init hero
+            Hero = new Hero("Herald Grimrian");
             Console.SetWindowSize(80, 30);
             //var map = new MapHandler();
             _currentMap = _map;
@@ -61,22 +63,22 @@ namespace GloriousConsoleAdventure
         /// </summary>
         static void MoveHero(int x, int y)
         {
-            Coordinate newHero = new Coordinate()
+            Coordinate heroCoordinate = new Coordinate()
             {
-                X = Hero.X + x,
-                Y = Hero.Y + y
+                X = Hero.Coordinates.X + x,
+                Y = Hero.Coordinates.Y + y
             };
 
-            if (_currentMap.IsMapExit(newHero.X, newHero.Y))
+            if (_currentMap.IsMapExit(heroCoordinate.X, heroCoordinate.Y))
             {
                 Direction exitDirection = Direction.North;
-                if (newHero.X == 0)
+                if (heroCoordinate.X == 0)
                     exitDirection = Direction.East;
-                if (newHero.Y == 0)
+                if (heroCoordinate.Y == 0)
                     exitDirection = Direction.North;
-                if (newHero.X == _currentMap.MapWidth + 1)
+                if (heroCoordinate.X == _currentMap.MapWidth + 1)
                     exitDirection = Direction.West;
-                if (newHero.Y == _currentMap.MapHeight + 1)
+                if (heroCoordinate.Y == _currentMap.MapHeight + 1)
                     exitDirection = Direction.South;
                 var previousMap = _currentMap;
                 _currentMap = _map2;
@@ -84,20 +86,20 @@ namespace GloriousConsoleAdventure
                 _currentMap.PlaceExit(previousMap.Map, exitDirection);
                 RemoveHero();
                 Console.BackgroundColor = HERO_COLOR;
-                Console.SetCursorPosition(newHero.X, newHero.Y);
+                Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
                 Console.Write(" ");
-                Hero = newHero;
+                Hero.Coordinates = heroCoordinate;
 
             }
 
-            if (CanMove(newHero))
+            if (CanMove(heroCoordinate))
             {
                 RemoveHero();
                 Console.BackgroundColor = HERO_COLOR;
-                Console.SetCursorPosition(newHero.X, newHero.Y);
+                Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
                 Console.Write(" ");
-                Hero = newHero;
-                BlockAction(newHero);
+                Hero.Coordinates = heroCoordinate;
+                BlockAction(heroCoordinate);
             }
         }
         /// <summary>
@@ -130,7 +132,7 @@ namespace GloriousConsoleAdventure
         static void RemoveHero()
         {
             Console.BackgroundColor = BACKGROUND_COLOR;
-            Console.SetCursorPosition(Hero.X, Hero.Y);
+            Console.SetCursorPosition(Hero.Coordinates.X, Hero.Coordinates.Y);
             Console.Write(" ");
         }
         /// <summary>
@@ -172,7 +174,7 @@ namespace GloriousConsoleAdventure
 
             if (startPosition == null)
             {
-                Hero = new Coordinate()
+                Hero.Coordinates = new Coordinate()
                 {
                     X = 0,
                     Y = 0
@@ -180,7 +182,7 @@ namespace GloriousConsoleAdventure
             }
             else
             {
-                Hero = new Coordinate
+                Hero.Coordinates = new Coordinate
                 {
                     X = startPosition[0],
                     Y = startPosition[1]
