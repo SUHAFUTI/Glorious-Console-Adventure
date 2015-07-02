@@ -60,28 +60,28 @@ namespace GloriousConsoleAdventure
             };
 
             //Experimental
-            //if (_currentMap.IsMapExit(newHero.X, newHero.Y))
-            //{
-            //    Direction exitDirection = Direction.North;
-            //    if(newHero.X == 0)
-            //        exitDirection = Direction.East;
-            //    if(newHero.Y == 0)
-            //        exitDirection = Direction.North;
-            //    if (newHero.X == _currentMap.MapWidth + 1)
-            //        exitDirection = Direction.West;
-            //    if (newHero.Y == _currentMap.MapHeight + 1)
-            //        exitDirection = Direction.South;
-            //    var previousMap = _currentMap;
-            //    _currentMap = _map2;
-            //    TheCartographer.DrawThisMapPlease(_currentMap);
-            //    _currentMap.PlaceExit(previousMap.Map, exitDirection);
-            //    RemoveHero();
-            //    Console.BackgroundColor = HERO_COLOR;
-            //    Console.SetCursorPosition(newHero.X, newHero.Y);
-            //    Console.Write(" ");
-            //    Hero = newHero;
-                
-            //}
+            if (_currentMap.IsMapExit(newHero.X, newHero.Y))
+            {
+                Direction exitDirection = Direction.North;
+                if (newHero.X == 0)
+                    exitDirection = Direction.East;
+                if (newHero.Y == 0)
+                    exitDirection = Direction.North;
+                if (newHero.X == _currentMap.MapWidth + 1)
+                    exitDirection = Direction.West;
+                if (newHero.Y == _currentMap.MapHeight + 1)
+                    exitDirection = Direction.South;
+                var previousMap = _currentMap;
+                _currentMap = _map2;
+                TheCartographer.DrawThisMapPlease(_currentMap);
+                _currentMap.PlaceExit(previousMap.Map, exitDirection);
+                RemoveHero();
+                Console.BackgroundColor = HERO_COLOR;
+                Console.SetCursorPosition(newHero.X, newHero.Y);
+                Console.Write(" ");
+                Hero = newHero;
+
+            }
 
             if (CanMove(newHero))
             {
