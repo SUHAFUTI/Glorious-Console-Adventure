@@ -19,11 +19,9 @@ namespace GloriousConsoleAdventure.Mapping
 {
     public class MapHandler
     {
+        //Todo move to global
         Random rand = new Random();
-
-
         public MapHandler[,] Maps { get; set; }
-
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
         public int PercentAreWalls { get; set; }
@@ -103,9 +101,9 @@ namespace GloriousConsoleAdventure.Mapping
             switch (entryDirection)
             {
                 case Direction.North:
-                    for (int i = 0; i < MapWidth-1; i++)
+                    for (int i = 0; i < MapWidth - 1; i++)
                     {
-                        Map[i, MapHeight-1] = exittingMap[i, 0];
+                        Map[i, MapHeight - 1] = exittingMap[i, 0];
                     }
                     break;
                 case Direction.South:
@@ -120,19 +118,20 @@ namespace GloriousConsoleAdventure.Mapping
                     break;
             }
         }
-
+        /// <summary>
+        /// Obsolete
+        /// </summary>
         [Obsolete("Please use PlaceRandomBlock with a Block.Coin")]
         public void PlaceRandomCoin()
         {
             var randX = rand.Next(1, MapWidth);
             var randY = rand.Next(1, MapHeight);
-            while (IsWall(randX,randY))
+            while (IsWall(randX, randY))
             {
                 randX = rand.Next(1, MapWidth);
                 randY = rand.Next(1, MapHeight);
             }
-            
-            Map[randX,randY] = Block.Coin;
+            Map[randX, randY] = Block.Coin;
         }
 
         /// <summary>
@@ -195,7 +194,7 @@ namespace GloriousConsoleAdventure.Mapping
 
             if (Map[x, y] == Block.Wall)
             {
-                 return true;
+                return true;
             }
 
             if (Map[x, y] == Block.EmptySpace)
@@ -244,7 +243,7 @@ namespace GloriousConsoleAdventure.Mapping
                                             PercentAreWalls.ToString(),
                                             Environment.NewLine
                                            );
-           
+
             for (int column = 0, row = 0; row < MapHeight; row++)
             {
                 for (column = 0; column < MapWidth; column++)
@@ -266,8 +265,6 @@ namespace GloriousConsoleAdventure.Mapping
                 }
             }
         }
-
-
 
         public void RandomFillMap()
         {
