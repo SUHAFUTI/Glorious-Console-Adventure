@@ -24,11 +24,44 @@ namespace GloriousConsoleAdventure
         Random rand = new Random();
 
 
+        public MapHandler[,] Maps { get; set; }
+
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
         public int PercentAreWalls { get; set; }
+        public Guid Id { get; set; }
 
         public Block[,] Map;
+
+        public MapHandler(int mapWidth, int mapHeight, Block[,] map, int percentWalls = 40)
+        {
+            this.MapWidth = mapWidth;
+            this.MapHeight = mapHeight;
+            this.PercentAreWalls = percentWalls;
+            Id = Guid.NewGuid();
+            this.Map = map;
+        }
+        public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40)
+        {
+            this.MapWidth = mapWidth;
+            this.MapHeight = mapHeight;
+            this.PercentAreWalls = percentWalls;
+            Id = Guid.NewGuid();
+            Map = new Block[MapWidth, MapHeight];
+            RandomFillMap();
+        }
+
+        public MapHandler()
+        {
+            MapWidth = 40;
+            MapHeight = 21;
+            PercentAreWalls = 40;
+
+            Map = new Block[MapWidth, MapHeight];
+
+            RandomFillMap();
+        }
+
         public void MakeCaverns()
         {
             // By initilizing column in the outter loop, its only created ONCE
@@ -65,6 +98,29 @@ namespace GloriousConsoleAdventure
                 }
             }
             return Block.EmptySpace;
+        }
+
+        public void PlaceExit(Block[,] exittingMap, Direction entryDirection)
+        {
+            switch (entryDirection)
+            {
+                case Direction.North:
+                    for (int i = 0; i < MapWidth-1; i++)
+                    {
+                        Map[i, MapHeight-1] = exittingMap[i, 0];
+                    }
+                    break;
+                case Direction.South:
+                    for (int i = 0; i < MapWidth; i++)
+                    {
+                        Map[i, 0] = exittingMap[i, 0];
+                    }
+                    break;
+                case Direction.East:
+                    break;
+                case Direction.West:
+                    break;
+            }
         }
 
         public void PlaceRandomCoin()
@@ -118,12 +174,21 @@ namespace GloriousConsoleAdventure
 
             if (Map[x, y] == Block.Wall)
             {
-                return true;
+                 return true;
             }
 
             if (Map[x, y] == Block.EmptySpace)
             {
                 return false;
+            }
+            return false;
+        }
+
+        public bool IsMapExit(int x, int y)
+        {
+            if (y == 0 || y == MapHeight + 1 || x == 0 || x == MapWidth + 1)
+            {
+                return true;
             }
             return false;
         }
@@ -169,32 +234,6 @@ namespace GloriousConsoleAdventure
             }
             return returnString;
         }
-        public MapHandler(int mapWidth, int mapHeight, Block[,] map, int percentWalls = 40)
-        {
-            this.MapWidth = mapWidth;
-            this.MapHeight = mapHeight;
-            this.PercentAreWalls = percentWalls;
-            this.Map = map;
-        }
-        public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40)
-        {
-            this.MapWidth = mapWidth;
-            this.MapHeight = mapHeight;
-            this.PercentAreWalls = percentWalls;
-            Map = new Block[MapWidth, MapHeight];
-            RandomFillMap();
-        }
-
-        public MapHandler()
-        {
-            MapWidth = 40;
-            MapHeight = 21;
-            PercentAreWalls = 40;
-
-            Map = new Block[MapWidth, MapHeight];
-
-            RandomFillMap();
-        }
 
         public void BlankMap()
         {
@@ -220,7 +259,7 @@ namespace GloriousConsoleAdventure
                 for (column = 0; column < MapWidth; column++)
                 {
                     // If coordinants lie on the the edge of the map (creates a border)
-                    if (column == 0)
+                    if (column == 0 && row != 10)
                     {
                         Map[column, row] = Block.Wall;
                     }
