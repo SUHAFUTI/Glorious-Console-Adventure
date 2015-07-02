@@ -24,8 +24,6 @@ namespace GloriousConsoleAdventure
             _currentMap = _map;
             TheCartographer.DrawThisMapPlease(_currentMap);
             InitGame(_currentMap.GetValidStartLocation());
-            PopulateMapWithBlocks(); //Move to cartographer
-            InitGame(_map.GetValidStartLocation());
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
@@ -50,13 +48,6 @@ namespace GloriousConsoleAdventure
             }
         }
 
-        static void PopulateMapWithBlocks()
-        {
-            _map.PlaceRandomBlock(Block.Coin);
-            _map.PlaceRandomBlock(Block.Teleport);
-            _map.PlaceRandomBlock(Block.Teleport);
-        }
-
         /// <summary>
         /// Paint the new hero
         /// </summary>
@@ -68,28 +59,29 @@ namespace GloriousConsoleAdventure
                 Y = Hero.Y + y
             };
 
-            if (_currentMap.IsMapExit(newHero.X, newHero.Y))
-            {
-                Direction exitDirection = Direction.North;
-                if(newHero.X == 0)
-                    exitDirection = Direction.East;
-                if(newHero.Y == 0)
-                    exitDirection = Direction.North;
-                if (newHero.X == _currentMap.MapWidth + 1)
-                    exitDirection = Direction.West;
-                if (newHero.Y == _currentMap.MapHeight + 1)
-                    exitDirection = Direction.South;
-                var previousMap = _currentMap;
-                _currentMap = _map2;
-                TheCartographer.DrawThisMapPlease(_currentMap);
-                _currentMap.PlaceExit(previousMap.Map, exitDirection);
-                RemoveHero();
-                Console.BackgroundColor = HERO_COLOR;
-                Console.SetCursorPosition(newHero.X, newHero.Y);
-                Console.Write(" ");
-                Hero = newHero;
+            //Experimental
+            //if (_currentMap.IsMapExit(newHero.X, newHero.Y))
+            //{
+            //    Direction exitDirection = Direction.North;
+            //    if(newHero.X == 0)
+            //        exitDirection = Direction.East;
+            //    if(newHero.Y == 0)
+            //        exitDirection = Direction.North;
+            //    if (newHero.X == _currentMap.MapWidth + 1)
+            //        exitDirection = Direction.West;
+            //    if (newHero.Y == _currentMap.MapHeight + 1)
+            //        exitDirection = Direction.South;
+            //    var previousMap = _currentMap;
+            //    _currentMap = _map2;
+            //    TheCartographer.DrawThisMapPlease(_currentMap);
+            //    _currentMap.PlaceExit(previousMap.Map, exitDirection);
+            //    RemoveHero();
+            //    Console.BackgroundColor = HERO_COLOR;
+            //    Console.SetCursorPosition(newHero.X, newHero.Y);
+            //    Console.Write(" ");
+            //    Hero = newHero;
                 
-            }
+            //}
 
             if (CanMove(newHero))
             {
