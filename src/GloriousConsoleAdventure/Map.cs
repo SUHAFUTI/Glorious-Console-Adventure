@@ -123,6 +123,7 @@ namespace GloriousConsoleAdventure
             }
         }
 
+        [Obsolete("Please use PlaceRandomBlock with a Block.Coin")]
         public void PlaceRandomCoin()
         {
             var randX = rand.Next(1, MapWidth);
@@ -134,6 +135,23 @@ namespace GloriousConsoleAdventure
             }
             
             Map[randX,randY] = Block.Coin;
+        }
+
+        /// <summary>
+        /// Places a random block on the map
+        /// </summary>
+        /// <param name="block">Takes a block</param>
+        public void PlaceRandomBlock(Block block)
+        {
+            var randX = rand.Next(1, MapWidth);
+            var randY = rand.Next(1, MapHeight);
+            while (IsWall(randX, randY))
+            {
+                randX = rand.Next(1, MapWidth);
+                randY = rand.Next(1, MapHeight);
+            }
+
+            Map[randX, randY] = block;
         }
 
         public int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
@@ -162,6 +180,11 @@ namespace GloriousConsoleAdventure
                 }
             }
             return wallCounter;
+        }
+
+        public Block GetCurrentBlock(int x, int y)
+        {
+            return Map[x, y];
         }
 
         public bool IsWall(int x, int y)

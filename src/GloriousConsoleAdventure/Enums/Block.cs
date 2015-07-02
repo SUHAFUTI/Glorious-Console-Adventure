@@ -10,6 +10,7 @@ namespace GloriousConsoleAdventure.Enums
     {
         EmptySpace = 0,
         Wall = 1,
-        Coin = 2
+        Coin = 2,
+        Teleport = 3,
     }
 }
