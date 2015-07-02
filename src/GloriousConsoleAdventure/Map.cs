@@ -230,6 +230,7 @@ namespace GloriousConsoleAdventure
         }
         public void PrintMap()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
             Console.Write(MapToString());
         }
