@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
 
-namespace GloriousConsoleAdventure
+namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
