@@ -182,6 +182,7 @@ namespace GloriousConsoleAdventure
             }
 
             MoveHero(0, 0);
+            ActionMenu.RenderMenu(Hero);
 
         }
     }
