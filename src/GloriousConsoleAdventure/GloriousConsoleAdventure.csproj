@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionMenu.cs" />
     <Compile Include="Mapping\Coordinate.cs" />
     <Compile Include="Enums\Block.cs" />
     <Compile Include="Enums\BlockType.cs" />

@@ -19,6 +19,5 @@ namespace GloriousConsoleAdventure
             {Block.Coin, "ò"},
             {Block.Teleport, "T"}
         };
-
     }
 }
