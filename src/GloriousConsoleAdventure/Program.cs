@@ -12,6 +12,8 @@ namespace GloriousConsoleAdventure
         const ConsoleColor HERO_COLOR = ConsoleColor.Cyan;
         const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
         static readonly MapHandler _map = new MapHandler(40,30);
+        static readonly MapHandler _map2 = new MapHandler(40,30);
+        private static MapHandler _currentMap;
         public static Coordinate Hero { get; set; } //Will represent our hero that's moving around :P/>
 
         static void Main(string[] args)
@@ -19,9 +21,10 @@ namespace GloriousConsoleAdventure
 
             Console.SetWindowSize(80,30);
             //var map = new MapHandler();
-            _map.MakeCaverns();
-            PopulateMapWithBlocks();
-            _map.PrintMap();
+            _currentMap = _map;
+            TheCartographer.DrawThisMapPlease(_currentMap);
+            InitGame(_currentMap.GetValidStartLocation());
+            PopulateMapWithBlocks(); //Move to cartographer
             InitGame(_map.GetValidStartLocation());
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
@@ -64,6 +67,29 @@ namespace GloriousConsoleAdventure
                 X = Hero.X + x,
                 Y = Hero.Y + y
             };
+
+            if (_currentMap.IsMapExit(newHero.X, newHero.Y))
+            {
+                Direction exitDirection = Direction.North;
+                if(newHero.X == 0)
+                    exitDirection = Direction.East;
+                if(newHero.Y == 0)
+                    exitDirection = Direction.North;
+                if (newHero.X == _currentMap.MapWidth + 1)
+                    exitDirection = Direction.West;
+                if (newHero.Y == _currentMap.MapHeight + 1)
+                    exitDirection = Direction.South;
+                var previousMap = _currentMap;
+                _currentMap = _map2;
+                TheCartographer.DrawThisMapPlease(_currentMap);
+                _currentMap.PlaceExit(previousMap.Map, exitDirection);
+                RemoveHero();
+                Console.BackgroundColor = HERO_COLOR;
+                Console.SetCursorPosition(newHero.X, newHero.Y);
+                Console.Write(" ");
+                Hero = newHero;
+                
+            }
 
             if (CanMove(newHero))
             {
@@ -117,7 +143,7 @@ namespace GloriousConsoleAdventure
         /// </summary>
         static bool CanMove(Coordinate c)
         {
-            if(_map.IsWall(c.X,c.Y)) return false;
+            if (_currentMap.IsWall(c.X, c.Y)) return false;
             if (c.X < 0 || c.X >= Console.WindowWidth)
                 return false;
 
