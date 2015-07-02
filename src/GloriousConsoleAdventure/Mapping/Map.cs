@@ -13,11 +13,9 @@
  */
 
 using System;
-using System.Collections.Generic;
 using GloriousConsoleAdventure.Enums;
-using GloriousConsoleAdventure.Models;
 
-namespace GloriousConsoleAdventure
+namespace GloriousConsoleAdventure.Mapping
 {
     public class MapHandler
     {

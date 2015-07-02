@@ -41,15 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mapping\Coordinate.cs" />
     <Compile Include="Enums\Block.cs" />
     <Compile Include="Enums\BlockType.cs" />
     <Compile Include="Enums\Directions.cs" />
-    <Compile Include="Map.cs" />
+    <Compile Include="Models\Hero\Hero.cs" />
+    <Compile Include="Mapping\Map.cs" />
+    <Compile Include="Mapping\MoveHandler.cs" />
     <Compile Include="Rendering.cs" />
     <Compile Include="Models\MapTile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TheCartographer.cs" />
+    <Compile Include="Mapping\TheCartographer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
