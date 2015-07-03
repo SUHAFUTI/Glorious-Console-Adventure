@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionMenu.cs" />
+    <Compile Include="Helpers\MagicRandomHat.cs" />
     <Compile Include="Mapping\Coordinate.cs" />
     <Compile Include="Enums\Block.cs" />
     <Compile Include="Enums\BlockType.cs" />
