@@ -11,14 +11,12 @@ namespace GloriousConsoleAdventure.Mapping
     {
         public static void DrawThisMapPlease(MapHandler map)
         {
-            map.MakeCaverns();
             PopulateMapWithBlocks(map);
             map.PrintMap();
         }
 
         public static void DrawMapWithExitsPlease(MapHandler map, Block[,] exitMap, Direction exitDirection)
         {
-            map.MakeCaverns();
             map.PlaceExit(exitMap, exitDirection);
             PopulateMapWithBlocks(map);
            

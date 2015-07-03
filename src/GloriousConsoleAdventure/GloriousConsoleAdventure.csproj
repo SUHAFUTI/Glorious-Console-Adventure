@@ -50,8 +50,8 @@
     <Compile Include="Models\Hero\Hero.cs" />
     <Compile Include="Mapping\Map.cs" />
     <Compile Include="Mapping\MoveHandler.cs" />
+    <Compile Include="Models\Map\MapDirectory.cs" />
     <Compile Include="Rendering.cs" />
-    <Compile Include="Models\MapTile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mapping\TheCartographer.cs" />
