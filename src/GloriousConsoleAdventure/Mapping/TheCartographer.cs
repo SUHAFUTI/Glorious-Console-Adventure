@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
 
-namespace GloriousConsoleAdventure
+namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
@@ -14,6 +14,15 @@ namespace GloriousConsoleAdventure
             map.MakeCaverns();
             PopulateMapWithBlocks(map);
             map.PrintMap();
+        }
+
+        public static void DrawMapWithExitsPlease(MapHandler map, Block[,] exitMap, Direction exitDirection)
+        {
+            map.MakeCaverns();
+            map.PlaceExit(exitMap, exitDirection);
+            PopulateMapWithBlocks(map);
+           
+            map.PrintMap();            
         }
         static void PopulateMapWithBlocks(MapHandler map)
         {
