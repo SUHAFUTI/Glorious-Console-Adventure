@@ -13,10 +13,11 @@ namespace GloriousConsoleAdventure
     {
         const ConsoleColor HERO_COLOR = ConsoleColor.Cyan;
         const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
-        static readonly MapHandler _map = new MapHandler(40, 30);
-        static readonly MapHandler _map2 = new MapHandler(40, 30);
+        private const int MAP_HEIGHT = 30;
+        private const int MAP_WIDTH = 40;
+        static readonly MapHandler _map = new MapHandler(MAP_WIDTH, MAP_HEIGHT);
         private static MapHandler _currentMap;
-        public static Hero Hero { get; set; } 
+        public static Hero Hero { get; set; }
 
         static void Main(string[] args)
         {
@@ -65,17 +66,26 @@ namespace GloriousConsoleAdventure
             {
                 Direction exitDirection = Direction.North;
                 if (heroCoordinate.X == 0)
+                {
                     exitDirection = Direction.East;
+                }
                 if (heroCoordinate.Y == 0)
+                {
                     exitDirection = Direction.North;
+                    heroCoordinate.Y = MAP_HEIGHT - 1;
+                }
                 if (heroCoordinate.X == _currentMap.MapWidth + 1)
+                {
                     exitDirection = Direction.West;
+                }
                 if (heroCoordinate.Y == _currentMap.MapHeight + 1)
+                {
                     exitDirection = Direction.South;
+                }
                 var previousMap = _currentMap;
+                MapHandler _map2 = new MapHandler(40, 30);
                 _currentMap = _map2;
-                TheCartographer.DrawThisMapPlease(_currentMap);
-                _currentMap.PlaceExit(previousMap.Map, exitDirection);
+                TheCartographer.DrawMapWithExitsPlease(_currentMap, previousMap.Map, exitDirection);
                 RemoveHero();
                 Console.BackgroundColor = HERO_COLOR;
                 Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);

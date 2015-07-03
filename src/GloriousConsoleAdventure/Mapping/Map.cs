@@ -14,13 +14,14 @@
 
 using System;
 using GloriousConsoleAdventure.Enums;
+using GloriousConsoleAdventure.Helpers;
 
 namespace GloriousConsoleAdventure.Mapping
 {
     public class MapHandler
     {
         //Todo move to global
-        Random rand = new Random();
+        public Random rand = MagicNumberHat.Random;
         public MapHandler[,] Maps { get; set; }
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
@@ -96,20 +97,21 @@ namespace GloriousConsoleAdventure.Mapping
             return Block.EmptySpace;
         }
 
-        public void PlaceExit(Block[,] exittingMap, Direction entryDirection)
+        //Experimental
+        public void PlaceExit(Block[,] exittingMap, Direction exitDirection)
         {
-            switch (entryDirection)
+            switch (exitDirection)
             {
                 case Direction.North:
                     for (int i = 0; i < MapWidth - 1; i++)
                     {
-                        Map[i, MapHeight - 1] = exittingMap[i, 0];
+                        Map[i, MapHeight - 1] = exittingMap[i, 1];
                     }
                     break;
                 case Direction.South:
                     for (int i = 0; i < MapWidth; i++)
                     {
-                        Map[i, 0] = exittingMap[i, 0];
+                        Map[i, 1] = exittingMap[i, MapHeight - 1];
                     }
                     break;
                 case Direction.East:
@@ -206,7 +208,7 @@ namespace GloriousConsoleAdventure.Mapping
 
         public bool IsMapExit(int x, int y)
         {
-            if (y == 0 || y == MapHeight + 1 || x == 0 || x == MapWidth + 1)
+            if (y == 0 || y == MapHeight || x == 0 || x == MapWidth )
             {
                 return true;
             }
