@@ -9,9 +9,9 @@ namespace GloriousConsoleAdventure
 {
     public static class Rendering
     {
-                    
-            
-
+        /// <summary>
+        /// Dictionary containing block types
+        /// </summary>
         public static Dictionary<Block, string> MapSymbols = new Dictionary<Block, string>
         {
             {Block.EmptySpace, " "},
@@ -19,6 +19,5 @@ namespace GloriousConsoleAdventure
             {Block.Coin, "ò"},
             {Block.Teleport, "T"}
         };
-
     }
 }
