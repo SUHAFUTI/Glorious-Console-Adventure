@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
@@ -18,11 +19,13 @@ namespace GloriousConsoleAdventure
         static readonly MapHandler _map = new MapHandler(MAP_WIDTH, MAP_HEIGHT);
         private static MapHandler _currentMap;
         public static Hero Hero { get; set; }
+        public static Dictionary<Guid, MapHandler> MapDictionary;
 
         static void Main(string[] args)
         {
             //Init hero
             Hero = new Hero("Herald Grimrian");
+            MapDictionary = new Dictionary<Guid, MapHandler>() { { _map.Id, _map } };
             Console.SetWindowSize(80, 30);
             //var map = new MapHandler();
             _currentMap = _map;
@@ -65,26 +68,44 @@ namespace GloriousConsoleAdventure
             if (_currentMap.IsMapExit(heroCoordinate.X, heroCoordinate.Y))
             {
                 Direction exitDirection = Direction.North;
+                Direction entryDirection = Direction.South;
                 if (heroCoordinate.X == 0)
                 {
                     exitDirection = Direction.East;
+                    entryDirection = Direction.West;
                 }
                 if (heroCoordinate.Y == 0)
                 {
                     exitDirection = Direction.North;
+                    entryDirection = Direction.South;
                     heroCoordinate.Y = MAP_HEIGHT - 1;
                 }
-                if (heroCoordinate.X == _currentMap.MapWidth + 1)
+                if (heroCoordinate.X == _currentMap.MapWidth)
                 {
                     exitDirection = Direction.West;
+                    entryDirection = Direction.East;
                 }
-                if (heroCoordinate.Y == _currentMap.MapHeight + 1)
+                if (heroCoordinate.Y == _currentMap.MapHeight)
                 {
                     exitDirection = Direction.South;
+                    entryDirection = Direction.North;
+                    heroCoordinate.Y = 1;
                 }
                 var previousMap = _currentMap;
-                MapHandler _map2 = new MapHandler(40, 30);
-                _currentMap = _map2;
+
+                if (_currentMap.AdjacentMaps.ContainsKey(exitDirection) && MapDictionary.ContainsKey(_currentMap.AdjacentMaps[exitDirection]))
+                {
+                    _currentMap = MapDictionary[_currentMap.AdjacentMaps[exitDirection]];
+                }
+                else
+                {
+                    MapHandler _map2 = new MapHandler(40, 30);
+                    MapDictionary.Add(_map2.Id, _map2);
+                    _currentMap.AdjacentMaps.Add(exitDirection, _map2.Id);
+                    _map2.AdjacentMaps.Add(entryDirection, _currentMap.Id);
+                    _currentMap = _map2;
+                }
+
                 TheCartographer.DrawMapWithExitsPlease(_currentMap, previousMap.Map, exitDirection);
                 RemoveHero();
                 Console.BackgroundColor = HERO_COLOR;

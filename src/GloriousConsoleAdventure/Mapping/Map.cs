@@ -13,8 +13,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Helpers;
+using GloriousConsoleAdventure.Models.Map;
 
 namespace GloriousConsoleAdventure.Mapping
 {
@@ -22,7 +24,7 @@ namespace GloriousConsoleAdventure.Mapping
     {
         //Todo move to global
         public Random rand = MagicNumberHat.Random;
-        public MapHandler[,] Maps { get; set; }
+        public Dictionary<Direction, Guid> AdjacentMaps { get; set; }
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
         public int PercentAreWalls { get; set; }
@@ -35,6 +37,7 @@ namespace GloriousConsoleAdventure.Mapping
             this.MapWidth = mapWidth;
             this.MapHeight = mapHeight;
             this.PercentAreWalls = percentWalls;
+            
             Id = Guid.NewGuid();
             this.Map = map;
         }
@@ -43,9 +46,11 @@ namespace GloriousConsoleAdventure.Mapping
             this.MapWidth = mapWidth;
             this.MapHeight = mapHeight;
             this.PercentAreWalls = percentWalls;
+            AdjacentMaps = new Dictionary<Direction, Guid>();
             Id = Guid.NewGuid();
             Map = new Block[MapWidth, MapHeight];
             RandomFillMap();
+            MakeCaverns();
         }
 
         public MapHandler()
@@ -264,7 +269,7 @@ namespace GloriousConsoleAdventure.Mapping
             {
                 for (column = 0; column < MapWidth; column++)
                 {
-                    Map[column, row] = 0;
+                    Map[column, row] = Block.EmptySpace;
                 }
             }
         }
