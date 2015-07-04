@@ -33,9 +33,9 @@ namespace GloriousConsoleAdventure.Mapping
 
         public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null)
         {
-            this.MapWidth = mapWidth;
-            this.MapHeight = mapHeight;
-            this.PercentAreWalls = percentWalls;
+            MapWidth = mapWidth;
+            MapHeight = mapHeight;
+            PercentAreWalls = percentWalls;
             AdjacentMaps = new Dictionary<Direction, Guid>();
             Id = Guid.NewGuid();
             Map = new Block[MapWidth, MapHeight];
@@ -184,8 +184,8 @@ namespace GloriousConsoleAdventure.Mapping
         {
             for (var i = 0; i == exits; i++)
             {
-                var values = Enum.GetValues(typeof (Direction));
-                var exit = (Direction) values.GetValue(MagicNumberHat.Random.Next(values.Length));
+                var values = Enum.GetValues(typeof(Direction));
+                var exit = (Direction)values.GetValue(MagicNumberHat.Random.Next(values.Length));
                 GenerateExit(exit);
             }
         }
