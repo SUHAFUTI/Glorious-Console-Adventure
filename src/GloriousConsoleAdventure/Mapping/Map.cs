@@ -182,8 +182,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="exits">Amount of exits</param>
         public void GenerateRandomExits(int exits)
         {
-            var exitAmount = MagicNumberHat.Random.Next(0, exits + 1);
-            for (var i = 0; i == exitAmount; i++)
+            for (var i = 0; i == exits; i++)
             {
                 var values = Enum.GetValues(typeof (Direction));
                 var exit = (Direction) values.GetValue(MagicNumberHat.Random.Next(values.Length));
