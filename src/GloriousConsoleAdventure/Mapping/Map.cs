@@ -208,7 +208,7 @@ namespace GloriousConsoleAdventure.Mapping
 
         public bool IsMapExit(int x, int y)
         {
-            if (y == 0 || y == MapHeight || x == 0 || x == MapWidth )
+            if (y == 0 || y == MapHeight || x == 0 || x == MapWidth)
             {
                 return true;
             }
@@ -325,8 +325,11 @@ namespace GloriousConsoleAdventure.Mapping
         /// <summary>
         /// Used to get a valid start position. E.g. NOT in a wall! 
         /// </summary>
+        /// <param name="x">x offset on where to start looking</param>
+        /// <param name="y">y offset on where to start looking</param>
         /// <returns>Coordinate of first valid position</returns>
-        public int[] GetValidStartLocation()
+
+        public int[] GetValidStartLocation(int x, int y)
         {
             for (int column = 0, row = 0; row < MapHeight; row++)
             {

@@ -27,7 +27,7 @@ namespace GloriousConsoleAdventure
             //var map = new MapHandler();
             _currentMap = _map;
             TheCartographer.DrawThisMapPlease(_currentMap);
-            InitGame(_currentMap.GetValidStartLocation());
+            InitGame(_currentMap.GetValidStartLocation(10,10));
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
