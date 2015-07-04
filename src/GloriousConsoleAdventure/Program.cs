@@ -32,6 +32,8 @@ namespace GloriousConsoleAdventure
 
         static void Main(string[] args)
         {
+            //Remove cursor
+            Console.CursorVisible = false;
             //Init hero
             Hero = new Hero("Herald Grimrian");
             MapDictionary = new Dictionary<Guid, MapHandler>() { { _map.Id, _map } };

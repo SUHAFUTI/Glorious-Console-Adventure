@@ -25,7 +25,9 @@ namespace GloriousConsoleAdventure.Menu
             {
                 //Set cursor to inside the menubox
                 Console.SetCursorPosition(46, 6);
+            #if DEBUG
                 Console.WriteLine("World position: ({0},{1})", hero.Coordinates.X, hero.Coordinates.Y);
+            #endif
             }
             if (hero.Coins > 0)
             {
@@ -45,11 +47,11 @@ namespace GloriousConsoleAdventure.Menu
             for (int i = 0; i < height; i++)
             {
                 Console.SetCursorPosition(41, y++);
-                Console.WriteLine("║                                    ║");    
+                Console.WriteLine("║                                    ║");
             }
             Console.SetCursorPosition(41, y);
             Console.WriteLine("╚════════════════════════════════════╝");
-            
+
         }
     }
 }
