@@ -52,6 +52,8 @@
     <Compile Include="Mapping\MoveHandler.cs" />
     <Compile Include="Models\Mob.cs" />
     <Compile Include="Mapping\Rendering.cs" />
+    <Compile Include="Models\Perk.cs" />
+    <Compile Include="Models\Stats.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mapping\TheCartographer.cs" />
