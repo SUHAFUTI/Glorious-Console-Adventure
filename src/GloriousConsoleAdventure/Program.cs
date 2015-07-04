@@ -25,7 +25,7 @@ namespace GloriousConsoleAdventure
             Block.Teleport
         };
 
-        static readonly MapHandler _map = new MapHandler(MapWidth, MapHeight, 40, RandomBlockConfiguration);
+        static readonly MapHandler Map = new MapHandler(MapWidth, MapHeight, 40, RandomBlockConfiguration);
         private static MapHandler _currentMap;
         public static Hero Hero { get; set; }
         public static Dictionary<Guid, MapHandler> MapDictionary;
@@ -36,11 +36,12 @@ namespace GloriousConsoleAdventure
             Console.CursorVisible = false;
             //Init hero
             Hero = new Hero("Herald Grimrian");
-            MapDictionary = new Dictionary<Guid, MapHandler>() { { _map.Id, _map } };
+            MapDictionary = new Dictionary<Guid, MapHandler>() { { Map.Id, Map } };
             Console.SetWindowSize(80, 30);
             //var map = new MapHandler();
-            _currentMap = _map;
-            _currentMap.GenerateExit(Direction.North);
+            _currentMap = Map;
+           _currentMap.GenerateExit(Direction.South);
+//_currentMap.GenerateRandomExits(4);
             TheCartographer.DrawThisMapPlease(_currentMap, Hero);
             InitGame(_currentMap.GetValidStartLocation(15, 15));
             ConsoleKeyInfo keyInfo;
