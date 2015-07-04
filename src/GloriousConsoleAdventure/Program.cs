@@ -16,7 +16,15 @@ namespace GloriousConsoleAdventure
         const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
         private const int MAP_HEIGHT = 30;
         private const int MAP_WIDTH = 40;
-        static readonly MapHandler _map = new MapHandler(MAP_WIDTH, MAP_HEIGHT);
+
+        private static readonly List<Block> RandomBlockConfiguration = new List<Block>
+        {
+            Block.Coin,
+            Block.Teleport,
+            Block.Teleport
+        };
+ 
+        static readonly MapHandler _map = new MapHandler(MAP_WIDTH, MAP_HEIGHT, 40 , RandomBlockConfiguration);
         private static MapHandler _currentMap;
         public static Hero Hero { get; set; }
         public static Dictionary<Guid, MapHandler> MapDictionary;
@@ -99,7 +107,7 @@ namespace GloriousConsoleAdventure
                 }
                 else
                 {
-                    MapHandler _map2 = new MapHandler(40, 30);
+                    MapHandler _map2 = new MapHandler(40, 30, 40, RandomBlockConfiguration);
                     MapDictionary.Add(_map2.Id, _map2);
                     _currentMap.AdjacentMaps.Add(exitDirection, _map2.Id);
                     _map2.AdjacentMaps.Add(entryDirection, _currentMap.Id);
@@ -107,7 +115,7 @@ namespace GloriousConsoleAdventure
                 }
 
                 TheCartographer.DrawMapWithExitsPlease(_currentMap, previousMap.Map, exitDirection);
-                RemoveHero();
+                //RemoveHero();
                 Console.BackgroundColor = HERO_COLOR;
                 Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
                 Console.Write(" ");
@@ -131,7 +139,7 @@ namespace GloriousConsoleAdventure
         /// <param name="coordinate"></param>
         private static void BlockAction(Coordinate coordinate)
         {
-            var block = _map.GetCurrentBlock(coordinate.X, coordinate.Y);
+            var block = _currentMap.GetCurrentBlock(coordinate.X, coordinate.Y);
 
             switch (block)
             {
@@ -139,11 +147,13 @@ namespace GloriousConsoleAdventure
                     var coinPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Coin + ".wav";
                     var coinPlayer = new System.Media.SoundPlayer(coinPath);
                     coinPlayer.Play();
+                    _currentMap.ClearBlock(coordinate.X, coordinate.Y);
                     break;
                 case Block.Teleport:
                     var teleportPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Teleport + ".wav";
                     var teleportPlayer = new System.Media.SoundPlayer(teleportPath);
                     teleportPlayer.Play();
+                    _currentMap.ClearBlock(coordinate.X, coordinate.Y);
                     //TODO teleport
                     break;
             }

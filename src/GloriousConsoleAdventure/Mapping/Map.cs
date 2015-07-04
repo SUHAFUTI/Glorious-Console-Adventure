@@ -16,14 +16,12 @@ using System;
 using System.Collections.Generic;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Helpers;
-using GloriousConsoleAdventure.Models.Map;
 
 namespace GloriousConsoleAdventure.Mapping
 {
     public class MapHandler
     {
-        //Todo move to global
-        public Random rand = MagicNumberHat.Random;
+        private readonly Random _rand = MagicNumberHat.Random;
         public Dictionary<Direction, Guid> AdjacentMaps { get; set; }
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
@@ -32,16 +30,7 @@ namespace GloriousConsoleAdventure.Mapping
 
         public Block[,] Map;
 
-        public MapHandler(int mapWidth, int mapHeight, Block[,] map, int percentWalls = 40)
-        {
-            this.MapWidth = mapWidth;
-            this.MapHeight = mapHeight;
-            this.PercentAreWalls = percentWalls;
-            
-            Id = Guid.NewGuid();
-            this.Map = map;
-        }
-        public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40)
+        public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null)
         {
             this.MapWidth = mapWidth;
             this.MapHeight = mapHeight;
@@ -51,17 +40,11 @@ namespace GloriousConsoleAdventure.Mapping
             Map = new Block[MapWidth, MapHeight];
             RandomFillMap();
             MakeCaverns();
-        }
+            if (randomBlocks != null)
+            {
+                randomBlocks.ForEach(PlaceRandomBlock);
+            }
 
-        public MapHandler()
-        {
-            MapWidth = 40;
-            MapHeight = 21;
-            PercentAreWalls = 40;
-
-            Map = new Block[MapWidth, MapHeight];
-
-            RandomFillMap();
         }
 
         public void MakeCaverns()
@@ -111,12 +94,24 @@ namespace GloriousConsoleAdventure.Mapping
                     for (int i = 0; i < MapWidth - 1; i++)
                     {
                         Map[i, MapHeight - 1] = exittingMap[i, 1];
+                        if (Map[i, MapHeight - 1] == Block.EmptySpace)
+                        {
+                            if (Map[i, MapHeight - 2] == Block.Wall)
+                                Map[i, MapHeight - 2] = Block.EmptySpace;
+
+                        }
                     }
                     break;
                 case Direction.South:
                     for (int i = 0; i < MapWidth; i++)
                     {
                         Map[i, 1] = exittingMap[i, MapHeight - 1];
+                        if (Map[i, 1] == Block.EmptySpace)
+                        {
+                            if (Map[i, 2] == Block.Wall)
+                                Map[i, 2] = Block.EmptySpace;
+                            
+                        }
                     }
                     break;
                 case Direction.East:
@@ -131,12 +126,12 @@ namespace GloriousConsoleAdventure.Mapping
         [Obsolete("Please use PlaceRandomBlock with a Block.Coin")]
         public void PlaceRandomCoin()
         {
-            var randX = rand.Next(1, MapWidth);
-            var randY = rand.Next(1, MapHeight);
+            var randX = _rand.Next(1, MapWidth);
+            var randY = _rand.Next(1, MapHeight);
             while (IsWall(randX, randY))
             {
-                randX = rand.Next(1, MapWidth);
-                randY = rand.Next(1, MapHeight);
+                randX = _rand.Next(1, MapWidth);
+                randY = _rand.Next(1, MapHeight);
             }
             Map[randX, randY] = Block.Coin;
         }
@@ -147,12 +142,12 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="block">Takes a block</param>
         public void PlaceRandomBlock(Block block)
         {
-            var randX = rand.Next(1, MapWidth);
-            var randY = rand.Next(1, MapHeight);
+            var randX = _rand.Next(1, MapWidth);
+            var randY = _rand.Next(1, MapHeight);
             while (IsWall(randX, randY))
             {
-                randX = rand.Next(1, MapWidth);
-                randY = rand.Next(1, MapHeight);
+                randX = _rand.Next(1, MapWidth);
+                randY = _rand.Next(1, MapHeight);
             }
 
             Map[randX, randY] = block;
@@ -191,6 +186,16 @@ namespace GloriousConsoleAdventure.Mapping
             return Map[x, y];
         }
 
+        /// <summary>
+        /// Sets the map cordinates to EmptySpace
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void ClearBlock(int x, int y)
+        {
+            Map[x, y] = Block.EmptySpace;
+        }
+
         public bool IsWall(int x, int y)
         {
             // Consider out-of-bound a wall
@@ -213,7 +218,7 @@ namespace GloriousConsoleAdventure.Mapping
 
         public bool IsMapExit(int x, int y)
         {
-            if (y == 0 || y == MapHeight || x == 0 || x == MapWidth )
+            if (y == 0 || y == MapHeight || x == 0 || x == MapWidth)
             {
                 return true;
             }
@@ -231,36 +236,6 @@ namespace GloriousConsoleAdventure.Mapping
                 return true;
             }
             return false;
-        }
-        public void PrintMap()
-        {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.Clear();
-            Console.Write(MapToString());
-        }
-
-        string MapToString(bool debug = false)
-        {
-            string returnString = "";
-            if (debug) returnString = string.Join(" ", // Seperator between each element
-                                            "Width:",
-                                            MapWidth.ToString(),
-                                            "\tHeight:",
-                                            MapHeight.ToString(),
-                                            "\t% Walls:",
-                                            PercentAreWalls.ToString(),
-                                            Environment.NewLine
-                                           );
-
-            for (int column = 0, row = 0; row < MapHeight; row++)
-            {
-                for (column = 0; column < MapWidth; column++)
-                {
-                    returnString += Rendering.MapSymbols[Map[column, row]];
-                }
-                returnString += Environment.NewLine;
-            }
-            return returnString;
         }
 
         public void BlankMap()
@@ -321,7 +296,7 @@ namespace GloriousConsoleAdventure.Mapping
 
         Block RandomPercent(int percent)
         {
-            if (percent >= rand.Next(1, 101))
+            if (percent >= _rand.Next(1, 101))
             {
                 return Block.Wall;
             }

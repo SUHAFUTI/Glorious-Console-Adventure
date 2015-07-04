@@ -9,24 +9,44 @@ namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
-        public static void DrawThisMapPlease(MapHandler map)
-        {
-            PopulateMapWithBlocks(map);
-            map.PrintMap();
-        }
-
+ 
         public static void DrawMapWithExitsPlease(MapHandler map, Block[,] exitMap, Direction exitDirection)
         {
             map.PlaceExit(exitMap, exitDirection);
-            PopulateMapWithBlocks(map);
-           
-            map.PrintMap();            
+        
+            DrawThisMapPlease(map);            
         }
-        static void PopulateMapWithBlocks(MapHandler map)
+
+        public static void DrawThisMapPlease(MapHandler map)
         {
-            map.PlaceRandomBlock(Block.Coin);
-            map.PlaceRandomBlock(Block.Teleport);
-            map.PlaceRandomBlock(Block.Teleport);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Gray; //Reset due to menu foreground change
+            Console.Clear();
+            Console.Write(MapToString(map));
+        }
+
+        private static string MapToString(MapHandler map, bool debug = false)
+        {
+            string returnString = "";
+            if (debug) returnString = string.Join(" ", // Seperator between each element
+                                            "Width:",
+                                            map.MapWidth.ToString(),
+                                            "\tHeight:",
+                                            map.MapHeight.ToString(),
+                                            "\t% Walls:",
+                                            map.PercentAreWalls.ToString(),
+                                            Environment.NewLine
+                                           );
+
+            for (int column = 0, row = 0; row < map.MapHeight; row++)
+            {
+                for (column = 0; column < map.MapWidth; column++)
+                {
+                    returnString += Rendering.MapSymbols[map.Map[column, row]];
+                }
+                returnString += Environment.NewLine;
+            }
+            return returnString;
         }
     }
 }
