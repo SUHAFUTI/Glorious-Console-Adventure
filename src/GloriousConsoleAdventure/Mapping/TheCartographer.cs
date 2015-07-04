@@ -4,31 +4,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
+using GloriousConsoleAdventure.Models.Hero;
 
 namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
-        public static void DrawThisMapPlease(MapHandler map)
+ 
+        public static void CloneExitsAndDrawThisMapPlease(MapHandler map, Block[,] exitMap, Direction exitDirection, Hero hero)
         {
-            map.MakeCaverns();
-            PopulateMapWithBlocks(map);
-            map.PrintMap();
+            map.CloneExit(exitMap, exitDirection);
+        
+            DrawThisMapPlease(map, hero);            
         }
 
-        public static void DrawMapWithExitsPlease(MapHandler map, Block[,] exitMap, Direction exitDirection)
+        public static void DrawThisMapPlease(MapHandler map, Hero hero)
         {
-            map.MakeCaverns();
-            map.PlaceExit(exitMap, exitDirection);
-            PopulateMapWithBlocks(map);
-           
-            map.PrintMap();            
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Gray; //Reset due to menu foreground change
+            Console.Clear();
+            Console.Write(MapToString(map));
+            ActionMenu.RenderMenu(hero);
         }
-        static void PopulateMapWithBlocks(MapHandler map)
+
+        private static string MapToString(MapHandler map, bool debug = false)
         {
-            map.PlaceRandomBlock(Block.Coin);
-            map.PlaceRandomBlock(Block.Teleport);
-            map.PlaceRandomBlock(Block.Teleport);
+            string returnString = "";
+            if (debug) returnString = string.Join(" ", // Seperator between each element
+                                            "Width:",
+                                            map.MapWidth.ToString(),
+                                            "\tHeight:",
+                                            map.MapHeight.ToString(),
+                                            "\t% Walls:",
+                                            map.PercentAreWalls.ToString(),
+                                            Environment.NewLine
+                                           );
+
+            for (int column = 0, row = 0; row < map.MapHeight; row++)
+            {
+                for (column = 0; column < map.MapWidth; column++)
+                {
+                    returnString += Rendering.MapSymbols[map.Map[column, row]];
+                }
+                returnString += Environment.NewLine;
+            }
+            return returnString;
         }
     }
 }

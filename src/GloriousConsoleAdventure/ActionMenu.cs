@@ -20,6 +20,23 @@ namespace GloriousConsoleAdventure
             //Set cursor to inside the menubox
             Console.SetCursorPosition(46, 2);
             Console.WriteLine("{0}", hero.Name);
+
+            //Set cursor to inside the menubox
+            Console.SetCursorPosition(46, 4);
+            Console.WriteLine("Steps taken: {0}", hero.Steps);
+
+            if (hero.Coordinates != null)
+            {
+                //Set cursor to inside the menubox
+                Console.SetCursorPosition(46, 6);
+                Console.WriteLine("World position: ({0},{1})", hero.Coordinates.X, hero.Coordinates.Y);
+            }
+            if (hero.Coins > 0)
+            {
+                //Set cursor to inside the menubox
+                Console.SetCursorPosition(46, 8);
+                Console.WriteLine("Coins: {0}", hero.Coins);
+            }
         }
 
         private static void Drawborders(int height)
