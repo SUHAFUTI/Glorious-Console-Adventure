@@ -353,12 +353,11 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="x">x offset on where to start looking</param>
         /// <param name="y">y offset on where to start looking</param>
         /// <returns>Coordinate of first valid position</returns>
-
         public int[] GetValidStartLocation(int x, int y)
         {
-            for (int column = 0, row = 0; row < MapHeight; row++)
+            for (int column = y, row = x; row < MapHeight; row++)
             {
-                for (column = 0; column < MapWidth; column++)
+                for (column = y; column < MapWidth; column++)
                 {
                     if (Map[column, row] == 0) return new[] { column, row };
                 }
