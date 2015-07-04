@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
+using GloriousConsoleAdventure.Menu;
 using GloriousConsoleAdventure.Models.Hero;
 
 namespace GloriousConsoleAdventure.Mapping

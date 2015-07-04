@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionMenu.cs" />
+    <Compile Include="Menu\ActionMenu.cs" />
     <Compile Include="Helpers\MagicRandomHat.cs" />
     <Compile Include="Mapping\Coordinate.cs" />
     <Compile Include="Enums\Block.cs" />
@@ -51,7 +51,7 @@
     <Compile Include="Mapping\Map.cs" />
     <Compile Include="Mapping\MoveHandler.cs" />
     <Compile Include="Models\Mob.cs" />
-    <Compile Include="Rendering.cs" />
+    <Compile Include="Mapping\Rendering.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mapping\TheCartographer.cs" />
