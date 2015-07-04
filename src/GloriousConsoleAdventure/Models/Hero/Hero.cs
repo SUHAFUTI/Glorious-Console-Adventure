@@ -2,7 +2,7 @@
 
 namespace GloriousConsoleAdventure.Models.Hero
 {
-    public class Hero
+    public class Hero : Mob
     {
         public int Steps { get; set; }
         public int Coins { get; set; }
@@ -10,8 +10,5 @@ namespace GloriousConsoleAdventure.Models.Hero
         {
             Name = name;
         }
-
-        public string Name { get; set; }
-        public Coordinate Coordinates { get; set; }
     }
 }
