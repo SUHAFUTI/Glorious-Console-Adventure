@@ -63,6 +63,12 @@ namespace GloriousConsoleAdventure.Mapping
                 }
             }
         }
+        /// <summary>
+        /// Places walls based on the 4/5 rule
+        /// </summary>
+        /// <param name="x">x coordinate</param>
+        /// <param name="y">y coordinate</param>
+        /// <returns></returns>
         public Block PlaceWallLogic(int x, int y)
         {
             int numWalls = GetAdjacentWalls(x, y, 1, 1);
@@ -89,8 +95,11 @@ namespace GloriousConsoleAdventure.Mapping
             }
             return Block.EmptySpace;
         }
-
-        //TODO: East and West
+        /// <summary>
+        /// Clone an exit from an existing map to a new one for consistency between an exit and an entrance
+        /// </summary>
+        /// <param name="exittingMap">Map to clone from</param>
+        /// <param name="exitDirection">Direction from which we came</param>
         public void CloneExit(Block[,] exittingMap, Direction exitDirection)
         {
             switch (exitDirection)
@@ -151,7 +160,10 @@ namespace GloriousConsoleAdventure.Mapping
                     break;
             }
         }
-
+        /// <summary>
+        /// Traverses map in a given direction and makes an exit at first possible empty tile.
+        /// </summary>
+        /// <param name="direction">Which direction the exit should appear</param>
         public void GenerateExit(Direction direction)
         {
             var foundExit = false;
@@ -272,7 +284,6 @@ namespace GloriousConsoleAdventure.Mapping
                 GenerateExit(exit);
             }
         }
-
         /// <summary>
         /// Places a random block on the map
         /// </summary>
@@ -289,7 +300,14 @@ namespace GloriousConsoleAdventure.Mapping
 
             Map[randX, randY] = block;
         }
-
+        /// <summary>
+        /// Returns how many walls are near a coordinate with given scope
+        /// </summary>
+        /// <param name="x">x coordinate</param>
+        /// <param name="y">y coordinate</param>
+        /// <param name="scopeX">scope x direction</param>
+        /// <param name="scopeY">scope y direction</param>
+        /// <returns>amount of walls</returns>
         public int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
         {
             int startX = x - scopeX;
@@ -317,12 +335,16 @@ namespace GloriousConsoleAdventure.Mapping
             }
             return wallCounter;
         }
-
+        /// <summary>
+        /// Get blocktype at coordinate
+        /// </summary>
+        /// <param name="x">x coordinate</param>
+        /// <param name="y">y coordinate</param>
+        /// <returns>blocktype</returns>
         public Block GetCurrentBlock(int x, int y)
         {
             return Map[x, y];
         }
-
         /// <summary>
         /// Sets the map cordinates to EmptySpace
         /// </summary>
@@ -332,7 +354,12 @@ namespace GloriousConsoleAdventure.Mapping
         {
             Map[x, y] = Block.EmptySpace;
         }
-
+        /// <summary>
+        /// Checks if given coordinates is a wall
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coodinate</param>
+        /// <returns>true if wall</returns>
         public bool IsWall(int x, int y)
         {
             // Consider out-of-bound a wall
@@ -352,8 +379,12 @@ namespace GloriousConsoleAdventure.Mapping
             }
             return false;
         }
-
-        //returns true if the position is a mapexit
+        /// <summary>
+        /// Checks if given coordinates is a map exit
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coodinate</param>
+        /// <returns></returns>
         public bool IsMapExit(int x, int y)
         {
             if (y == 0 || y == MapHeight || x == 0 || x == MapWidth)
@@ -362,7 +393,12 @@ namespace GloriousConsoleAdventure.Mapping
             }
             return false;
         }
-
+        /// <summary>
+        /// Checks if coordinates is out of bounds
+        /// </summary>
+        /// <param name="x">x coordinate</param>
+        /// <param name="y">y coorindate</param>
+        /// <returns>true if out of bounds</returns>
         bool IsOutOfBounds(int x, int y)
         {
             if (x < 0 || y < 0)
@@ -375,7 +411,9 @@ namespace GloriousConsoleAdventure.Mapping
             }
             return false;
         }
-
+        /// <summary>
+        /// Generates a blank map
+        /// </summary>
         public void BlankMap()
         {
             for (int column = 0, row = 0; row < MapHeight; row++)
@@ -386,7 +424,6 @@ namespace GloriousConsoleAdventure.Mapping
                 }
             }
         }
-
         /// <summary>
         /// Randomly fills map
         /// </summary>
@@ -434,7 +471,11 @@ namespace GloriousConsoleAdventure.Mapping
                 }
             }
         }
-
+        /// <summary>
+        /// Returns either a wall or empty with percent as seed
+        /// </summary>
+        /// <param name="percent">How high chance there should be for a wall</param>
+        /// <returns>Either a wall or empty</returns>
         Block RandomPercent(int percent)
         {
             if (percent >= _rand.Next(1, 101))
