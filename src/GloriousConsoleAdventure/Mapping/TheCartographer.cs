@@ -4,25 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
+using GloriousConsoleAdventure.Menu;
+using GloriousConsoleAdventure.Models.Hero;
 
 namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
  
-        public static void DrawMapWithExitsPlease(MapHandler map, Block[,] exitMap, Direction exitDirection)
+        public static void CloneExitsAndDrawThisMapPlease(MapHandler map, Block[,] exitMap, Direction exitDirection, Hero hero)
         {
-            map.PlaceExit(exitMap, exitDirection);
+            map.CloneExit(exitMap, exitDirection);
         
-            DrawThisMapPlease(map);            
+            DrawThisMapPlease(map, hero);            
         }
 
-        public static void DrawThisMapPlease(MapHandler map)
+        public static void DrawThisMapPlease(MapHandler map, Hero hero)
         {
+
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray; //Reset due to menu foreground change
             Console.Clear();
             Console.Write(MapToString(map));
+            ActionMenu.RenderMenu(hero);
         }
 
         private static string MapToString(MapHandler map, bool debug = false)

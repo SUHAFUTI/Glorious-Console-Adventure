@@ -6,16 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Mapping;
+using GloriousConsoleAdventure.Menu;
 using GloriousConsoleAdventure.Models.Hero;
 
 namespace GloriousConsoleAdventure
 {
     class Program
     {
-        const ConsoleColor HERO_COLOR = ConsoleColor.Cyan;
-        const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
-        private const int MAP_HEIGHT = 30;
-        private const int MAP_WIDTH = 40;
+        const ConsoleColor HeroColor = ConsoleColor.Cyan;
+        const ConsoleColor BackgroundColor = ConsoleColor.Black;
+        private const int MapHeight = 30;
+        private const int MapWidth = 40;
 
         private static readonly List<Block> RandomBlockConfiguration = new List<Block>
         {
@@ -23,22 +24,30 @@ namespace GloriousConsoleAdventure
             Block.Teleport,
             Block.Teleport
         };
- 
-        static readonly MapHandler _map = new MapHandler(MAP_WIDTH, MAP_HEIGHT, 40 , RandomBlockConfiguration);
+
+        static readonly MapHandler Map = new MapHandler(MapWidth, MapHeight, 40, RandomBlockConfiguration);
         private static MapHandler _currentMap;
         public static Hero Hero { get; set; }
         public static Dictionary<Guid, MapHandler> MapDictionary;
 
         static void Main(string[] args)
         {
+            //Remove cursor
+            Console.CursorVisible = false;
             //Init hero
             Hero = new Hero("Herald Grimrian");
-            MapDictionary = new Dictionary<Guid, MapHandler>() { { _map.Id, _map } };
-            Console.SetWindowSize(80, 30);
+            MapDictionary = new Dictionary<Guid, MapHandler>() { { Map.Id, Map } };
+            //Height has to be 1 more than map
+            Console.SetWindowSize(80, 31);
             //var map = new MapHandler();
-            _currentMap = _map;
-            TheCartographer.DrawThisMapPlease(_currentMap);
-            InitGame(_currentMap.GetValidStartLocation());
+            _currentMap = Map;
+            _currentMap.GenerateExit(Direction.North);
+            _currentMap.GenerateExit(Direction.South);
+            _currentMap.GenerateExit(Direction.East);
+            _currentMap.GenerateExit(Direction.West);
+           // _currentMap.GenerateRandomExits(4);
+            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+            InitGame(_currentMap.GetValidStartLocation(15, 15));
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
@@ -63,11 +72,13 @@ namespace GloriousConsoleAdventure
             }
         }
         /// <summary>
-        /// Paint the new hero
+        /// Paint the hero
         /// </summary>
+        /// <param name="x">Move x</param>
+        /// <param name="y">Move y</param>
         static void MoveHero(int x, int y)
         {
-            Coordinate heroCoordinate = new Coordinate()
+            var heroCoordinate = new Coordinate()
             {
                 X = Hero.Coordinates.X + x,
                 Y = Hero.Coordinates.Y + y
@@ -77,22 +88,28 @@ namespace GloriousConsoleAdventure
             {
                 Direction exitDirection = Direction.North;
                 Direction entryDirection = Direction.South;
+                //If X is 0 we go west
                 if (heroCoordinate.X == 0)
                 {
-                    exitDirection = Direction.East;
-                    entryDirection = Direction.West;
+                    exitDirection = Direction.West;
+                    entryDirection = Direction.East;
+                    heroCoordinate.X = MapWidth - 1;
                 }
+                //If Y is 0 we go North
                 if (heroCoordinate.Y == 0)
                 {
                     exitDirection = Direction.North;
                     entryDirection = Direction.South;
-                    heroCoordinate.Y = MAP_HEIGHT - 1;
+                    heroCoordinate.Y = MapHeight - 1;
                 }
+                //If x is the width of the map we go east
                 if (heroCoordinate.X == _currentMap.MapWidth)
                 {
-                    exitDirection = Direction.West;
-                    entryDirection = Direction.East;
+                    exitDirection = Direction.East;
+                    entryDirection = Direction.West;
+                    heroCoordinate.X = 1;
                 }
+                //If x is the height we go South
                 if (heroCoordinate.Y == _currentMap.MapHeight)
                 {
                     exitDirection = Direction.South;
@@ -107,16 +124,16 @@ namespace GloriousConsoleAdventure
                 }
                 else
                 {
-                    MapHandler _map2 = new MapHandler(40, 30, 40, RandomBlockConfiguration);
-                    MapDictionary.Add(_map2.Id, _map2);
-                    _currentMap.AdjacentMaps.Add(exitDirection, _map2.Id);
-                    _map2.AdjacentMaps.Add(entryDirection, _currentMap.Id);
-                    _currentMap = _map2;
+                    MapHandler nextMap = new MapHandler(40, 30, 40, RandomBlockConfiguration);
+                    MapDictionary.Add(nextMap.Id, nextMap);
+                    _currentMap.AdjacentMaps.Add(exitDirection, nextMap.Id);
+                    nextMap.AdjacentMaps.Add(entryDirection, _currentMap.Id);
+                    _currentMap = nextMap;
                 }
 
-                TheCartographer.DrawMapWithExitsPlease(_currentMap, previousMap.Map, exitDirection);
+                TheCartographer.CloneExitsAndDrawThisMapPlease(_currentMap, previousMap.Map, exitDirection, Hero);
                 //RemoveHero();
-                Console.BackgroundColor = HERO_COLOR;
+                Console.BackgroundColor = HeroColor;
                 Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
                 Console.Write(" ");
                 Hero.Coordinates = heroCoordinate;
@@ -126,12 +143,14 @@ namespace GloriousConsoleAdventure
             if (CanMove(heroCoordinate))
             {
                 RemoveHero();
-                Console.BackgroundColor = HERO_COLOR;
+                Console.BackgroundColor = HeroColor;
                 Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
                 Console.Write(" ");
                 Hero.Coordinates = heroCoordinate;
                 BlockAction(heroCoordinate);
             }
+            Hero.Steps++;
+            ActionMenu.RenderMenu(Hero);
         }
         /// <summary>
         /// This is a method that checks if a block is hit and what action to run
@@ -148,6 +167,7 @@ namespace GloriousConsoleAdventure
                     var coinPlayer = new System.Media.SoundPlayer(coinPath);
                     coinPlayer.Play();
                     _currentMap.ClearBlock(coordinate.X, coordinate.Y);
+                    Hero.Coins++;
                     break;
                 case Block.Teleport:
                     var teleportPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Teleport + ".wav";
@@ -164,7 +184,7 @@ namespace GloriousConsoleAdventure
         /// </summary>
         static void RemoveHero()
         {
-            Console.BackgroundColor = BACKGROUND_COLOR;
+            Console.BackgroundColor = BackgroundColor;
             Console.SetCursorPosition(Hero.Coordinates.X, Hero.Coordinates.Y);
             Console.Write(" ");
         }
@@ -184,27 +204,12 @@ namespace GloriousConsoleAdventure
             return true;
         }
         /// <summary>
-        /// Paint a background color
-        /// </summary>
-        /// <remarks>
-        /// It is very important that you run the Clear() method after
-        /// changing the background color since this causes a repaint of the background
-        /// </remarks>
-        static void SetBackgroundColor()
-        {
-            Console.BackgroundColor = BACKGROUND_COLOR;
-            Console.Clear(); //Important!
-        }
-        /// <summary>
         /// Initiates the game by painting the background
         /// and initiating the hero
         /// </summary>
         static void InitGame(int[] startPosition = null)
         {
-            //We don't need this when we used a map generator
-            // SetBackgroundColor();
-
-
+            //If we don't have a start position default to 0,0
             if (startPosition == null)
             {
                 Hero.Coordinates = new Coordinate()
@@ -213,6 +218,7 @@ namespace GloriousConsoleAdventure
                     Y = 0
                 };
             }
+            //otherwise give Hero default coordinates
             else
             {
                 Hero.Coordinates = new Coordinate
