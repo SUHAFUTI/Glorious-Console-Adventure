@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
@@ -15,18 +16,29 @@ namespace GloriousConsoleAdventure
         const ConsoleColor BACKGROUND_COLOR = ConsoleColor.Black;
         private const int MAP_HEIGHT = 30;
         private const int MAP_WIDTH = 40;
-        static readonly MapHandler _map = new MapHandler(MAP_WIDTH, MAP_HEIGHT);
+
+        private static readonly List<Block> RandomBlockConfiguration = new List<Block>
+        {
+            Block.Coin,
+            Block.Teleport,
+            Block.Teleport
+        };
+ 
+        static readonly MapHandler _map = new MapHandler(MAP_WIDTH, MAP_HEIGHT, 40 , RandomBlockConfiguration);
         private static MapHandler _currentMap;
         public static Hero Hero { get; set; }
+        public static Dictionary<Guid, MapHandler> MapDictionary;
 
         static void Main(string[] args)
         {
             //Init hero
             Hero = new Hero("Herald Grimrian");
+            MapDictionary = new Dictionary<Guid, MapHandler>() { { _map.Id, _map } };
             Console.SetWindowSize(80, 30);
             //var map = new MapHandler();
             _currentMap = _map;
-            TheCartographer.DrawThisMapPlease(_currentMap);
+            _currentMap.GenerateExit(Direction.North);
+            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
             InitGame(_currentMap.GetValidStartLocation(10,10));
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
@@ -65,28 +77,46 @@ namespace GloriousConsoleAdventure
             if (_currentMap.IsMapExit(heroCoordinate.X, heroCoordinate.Y))
             {
                 Direction exitDirection = Direction.North;
+                Direction entryDirection = Direction.South;
                 if (heroCoordinate.X == 0)
                 {
                     exitDirection = Direction.East;
+                    entryDirection = Direction.West;
                 }
                 if (heroCoordinate.Y == 0)
                 {
                     exitDirection = Direction.North;
+                    entryDirection = Direction.South;
                     heroCoordinate.Y = MAP_HEIGHT - 1;
                 }
-                if (heroCoordinate.X == _currentMap.MapWidth + 1)
+                if (heroCoordinate.X == _currentMap.MapWidth)
                 {
                     exitDirection = Direction.West;
+                    entryDirection = Direction.East;
                 }
-                if (heroCoordinate.Y == _currentMap.MapHeight + 1)
+                if (heroCoordinate.Y == _currentMap.MapHeight)
                 {
                     exitDirection = Direction.South;
+                    entryDirection = Direction.North;
+                    heroCoordinate.Y = 1;
                 }
                 var previousMap = _currentMap;
-                MapHandler _map2 = new MapHandler(40, 30);
-                _currentMap = _map2;
-                TheCartographer.DrawMapWithExitsPlease(_currentMap, previousMap.Map, exitDirection);
-                RemoveHero();
+
+                if (_currentMap.AdjacentMaps.ContainsKey(exitDirection) && MapDictionary.ContainsKey(_currentMap.AdjacentMaps[exitDirection]))
+                {
+                    _currentMap = MapDictionary[_currentMap.AdjacentMaps[exitDirection]];
+                }
+                else
+                {
+                    MapHandler _map2 = new MapHandler(40, 30, 40, RandomBlockConfiguration);
+                    MapDictionary.Add(_map2.Id, _map2);
+                    _currentMap.AdjacentMaps.Add(exitDirection, _map2.Id);
+                    _map2.AdjacentMaps.Add(entryDirection, _currentMap.Id);
+                    _currentMap = _map2;
+                }
+
+                TheCartographer.CloneExitsAndDrawThisMapPlease(_currentMap, previousMap.Map, exitDirection, Hero);
+                //RemoveHero();
                 Console.BackgroundColor = HERO_COLOR;
                 Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
                 Console.Write(" ");
@@ -103,6 +133,8 @@ namespace GloriousConsoleAdventure
                 Hero.Coordinates = heroCoordinate;
                 BlockAction(heroCoordinate);
             }
+            Hero.Steps++;
+            ActionMenu.RenderMenu(Hero);
         }
         /// <summary>
         /// This is a method that checks if a block is hit and what action to run
@@ -110,7 +142,7 @@ namespace GloriousConsoleAdventure
         /// <param name="coordinate"></param>
         private static void BlockAction(Coordinate coordinate)
         {
-            var block = _map.GetCurrentBlock(coordinate.X, coordinate.Y);
+            var block = _currentMap.GetCurrentBlock(coordinate.X, coordinate.Y);
 
             switch (block)
             {
@@ -118,11 +150,14 @@ namespace GloriousConsoleAdventure
                     var coinPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Coin + ".wav";
                     var coinPlayer = new System.Media.SoundPlayer(coinPath);
                     coinPlayer.Play();
+                    _currentMap.ClearBlock(coordinate.X, coordinate.Y);
+                    Hero.Coins++;
                     break;
                 case Block.Teleport:
                     var teleportPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Teleport + ".wav";
                     var teleportPlayer = new System.Media.SoundPlayer(teleportPath);
                     teleportPlayer.Play();
+                    _currentMap.ClearBlock(coordinate.X, coordinate.Y);
                     //TODO teleport
                     break;
             }
