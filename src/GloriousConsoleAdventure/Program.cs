@@ -42,6 +42,9 @@ namespace GloriousConsoleAdventure
             //var map = new MapHandler();
             _currentMap = Map;
             _currentMap.GenerateExit(Direction.North);
+            _currentMap.GenerateExit(Direction.South);
+            _currentMap.GenerateExit(Direction.East);
+            _currentMap.GenerateExit(Direction.West);
            // _currentMap.GenerateRandomExits(4);
             TheCartographer.DrawThisMapPlease(_currentMap, Hero);
             InitGame(_currentMap.GetValidStartLocation(15, 15));
@@ -85,22 +88,28 @@ namespace GloriousConsoleAdventure
             {
                 Direction exitDirection = Direction.North;
                 Direction entryDirection = Direction.South;
+                //If X is 0 we go west
                 if (heroCoordinate.X == 0)
                 {
-                    exitDirection = Direction.East;
-                    entryDirection = Direction.West;
+                    exitDirection = Direction.West;
+                    entryDirection = Direction.East;
+                    heroCoordinate.X = MapWidth - 1;
                 }
+                //If Y is 0 we go North
                 if (heroCoordinate.Y == 0)
                 {
                     exitDirection = Direction.North;
                     entryDirection = Direction.South;
                     heroCoordinate.Y = MapHeight - 1;
                 }
+                //If x is the width of the map we go east
                 if (heroCoordinate.X == _currentMap.MapWidth)
                 {
-                    exitDirection = Direction.West;
-                    entryDirection = Direction.East;
+                    exitDirection = Direction.East;
+                    entryDirection = Direction.West;
+                    heroCoordinate.X = 1;
                 }
+                //If x is the height we go South
                 if (heroCoordinate.Y == _currentMap.MapHeight)
                 {
                     exitDirection = Direction.South;

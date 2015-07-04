@@ -25,8 +25,8 @@ namespace GloriousConsoleAdventure.Mapping
         public int MapHeight { get; set; }
         public int PercentAreWalls { get; set; }
         public Guid Id { get; set; }
-
         public Block[,] Map;
+
         /// <summary>
         /// Handles map related stuff
         /// </summary>
@@ -122,63 +122,140 @@ namespace GloriousConsoleAdventure.Mapping
                     }
                     break;
                 case Direction.East:
+                    //Traverse the column
+                    for (var y = 0; y < MapHeight; y++)
+                    {
+                        //Map exit from exitmap
+                        Map[1, y] = exittingMap[MapWidth - 1, y];
+                        //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
+                        if (Map[1, y] == Block.EmptySpace)
+                        {
+                            if (Map[2, y] == Block.Wall)
+                                Map[2, y] = Block.EmptySpace;
+                        }
+                    }
                     break;
                 case Direction.West:
+                    //Traverse the column
+                    for (var y = 0; y < MapHeight; y++)
+                    {
+                        //Map exit from exitmap
+                        Map[MapWidth -1, y] = exittingMap[1 - 1, y];
+                        //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
+                        if (Map[MapWidth- 1, y] == Block.EmptySpace)
+                        {
+                            if (Map[MapWidth -2, y] == Block.Wall)
+                                Map[MapWidth -2, y] = Block.EmptySpace;
+                        }
+                    }
                     break;
             }
         }
 
         public void GenerateExit(Direction direction)
         {
+            var foundExit = false;
             switch (direction)
             {
                 case Direction.North:
-                    var empties = new List<int>();
-                    for (int x = 0; x < MapWidth - 1; x++)
+                    //Traverse rows one by one
+                    for (var y = 0; y < MapHeight; y++)
                     {
-                        if (Map[x, MapHeight - 4] == Block.EmptySpace)
+                        //and do it untill we find an exit
+                        if (foundExit) break;
+                        //Check every coordinate in that row
+                        for (var x = 0; x < MapWidth - 1; x++)
                         {
-                            empties.Add(x);
-
-                            ////if the block above is a wall, remove it to make way, should perhaps check one or two tiles more
-                            //if (Map[x, MapHeight - 2] == Block.Wall)
-                            //    Map[x, MapHeight - 2] = Block.EmptySpace;
+                            //We only want one exit?
+                            if (foundExit) break;
+                            //If its empty 
+                            if (Map[x, y] == Block.EmptySpace)
+                            {
+                                //Carve exit upwards
+                                for (var i = y; i >= 0; i--)
+                                {
+                                    Map[x, i] = Block.EmptySpace;
+                                }
+                                //Let the column loop know we found an exit
+                                foundExit = true;
+                            }
                         }
                     }
-                    if (!empties.Any())
-                    {
-                        for (int i = MapHeight - 5; i < MapHeight - 1; i++)
-                        {
-                            Map[15, i] = Block.EmptySpace;
-                            Map[16, i] = Block.EmptySpace;
-                        }
-                    }
-                    else
-                    {
-                        for (int i = MapHeight - 4; i < MapHeight - 1; i++)
-                        {
-                            Map[empties[0], i] = Block.EmptySpace;
-                            Map[empties[0], i] = Block.EmptySpace;
-                        }
-                    }
-
                     break;
                 case Direction.South:
-                    for (int i = 0; i < MapWidth; i++)
+                    //Traverse rows one by one
+                    for (var y = MapHeight - 1; y > 0; y--)
                     {
-
-                        //if the block below is a wall, remove it to make way, should perhaps check one or two tiles more
-                        if (Map[i, 1] == Block.EmptySpace)
+                        //and do it untill we find an exit
+                        if (foundExit) break;
+                        //Check every coordinate in that row
+                        for (var x = 0; x < MapWidth - 1; x++)
                         {
-                            if (Map[i, 2] == Block.Wall)
-                                Map[i, 2] = Block.EmptySpace;
-
+                            //We only want one exit?
+                            if (foundExit) break;
+                            //If its empty 
+                            if (Map[x, y] == Block.EmptySpace)
+                            {
+                                //Carve exit downwards
+                                for (var i = y; i < MapHeight; i++)
+                                {
+                                    Map[x, i] = Block.EmptySpace;
+                                }
+                                //Let the column loop know we found an exit
+                                foundExit = true;
+                            }
+                        }
+                    }
+                    break;
+                case Direction.West:
+                    //Traverse columns one by one starting from left
+                    for (var x = 0; x < MapWidth; x++)
+                    {
+                        //and do it untill we find an exit
+                        if (foundExit) break;
+                        //Check every coordinate in that column
+                        for (var y = 0; y < MapHeight - 1; y++)
+                        {
+                            //We only want one exit?
+                            if (foundExit) break;
+                            //If its empty 
+                            if (Map[x, y] == Block.EmptySpace)
+                            {
+                                //Carve exit left
+                                for (var i = x; i >= 0; i--)
+                                {
+                                    Map[i, y] = Block.EmptySpace;
+                                }
+                                //Let the column loop know we found an exit
+                                foundExit = true;
+                            }
                         }
                     }
                     break;
                 case Direction.East:
-                    break;
-                case Direction.West:
+                    //Traverse columns one by one starting from the right
+                    for (var x = MapWidth - 1; x < MapWidth; x--)
+                    {
+                        //and do it untill we find an exit
+                        if (foundExit) break;
+                        //Check every coordinate in that column
+                        for (var y = 0; y < MapHeight - 1; y++)
+                        {
+                            //We only want one exit?
+                            if (foundExit) break;
+                            //If its empty 
+                            if (Map[x, y] == Block.EmptySpace)
+                            {
+                                //Carve exit right
+                                for (var i = x; i <= MapWidth - 1; i++)
+                                {
+                                    Map[i, y] = Block.EmptySpace;
+                                }
+                                //Let the column loop know we found an exit
+                                foundExit = true;
+                            }
+                        }
+                    }
                     break;
             }
         }
@@ -321,9 +398,9 @@ namespace GloriousConsoleAdventure.Mapping
             int mapMiddle = 0; // Temp variable
             for (int column = 0, row = 0; row < MapHeight; row++)
             {
+                //Border creation
                 for (column = 0; column < MapWidth; column++)
                 {
-                    // If coordinants lie on the the edge of the map (creates a border)
                     if (column == 0)
                     {
                         Map[column, row] = Block.Wall;
