@@ -37,7 +37,8 @@ namespace GloriousConsoleAdventure
             //Init hero
             Hero = new Hero("Herald Grimrian");
             MapDictionary = new Dictionary<Guid, MapHandler>() { { Map.Id, Map } };
-            Console.SetWindowSize(80, 30);
+            //Height has to be 1 more than map
+            Console.SetWindowSize(80, 31);
             //var map = new MapHandler();
             _currentMap = Map;
             _currentMap.GenerateExit(Direction.North);
