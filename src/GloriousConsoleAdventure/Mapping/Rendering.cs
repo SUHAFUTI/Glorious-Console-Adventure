@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GloriousConsoleAdventure.Enums;
 
 namespace GloriousConsoleAdventure.Mapping
@@ -15,5 +16,17 @@ namespace GloriousConsoleAdventure.Mapping
             {Block.Coin, "ò"},
             {Block.Teleport, "T"}
         };
+        /// <summary>
+        /// Paint a background color
+        /// </summary>
+        /// <remarks>
+        /// It is very important that you run the Clear() method after
+        /// changing the background color since this causes a repaint of the background
+        /// </remarks>
+        static void SetBackgroundColor(ConsoleColor color)
+        {
+            Console.BackgroundColor = color;
+            Console.Clear(); //Important!
+        }
     }
 }
