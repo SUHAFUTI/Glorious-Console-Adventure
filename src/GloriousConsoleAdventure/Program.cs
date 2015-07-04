@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Mapping;
+using GloriousConsoleAdventure.Menu;
 using GloriousConsoleAdventure.Models.Hero;
 
 namespace GloriousConsoleAdventure
