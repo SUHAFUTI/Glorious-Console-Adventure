@@ -45,9 +45,7 @@ namespace GloriousConsoleAdventure.Mapping
             {
                 randomBlocks.ForEach(PlaceRandomBlock);
             }
-
         }
-
         public void MakeCaverns()
         {
             // By initilizing column in the outter loop, its only created ONCE
