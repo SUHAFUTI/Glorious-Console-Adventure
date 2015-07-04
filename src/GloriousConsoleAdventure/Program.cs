@@ -41,7 +41,7 @@ namespace GloriousConsoleAdventure
             //var map = new MapHandler();
             _currentMap = Map;
            _currentMap.GenerateExit(Direction.South);
-//_currentMap.GenerateRandomExits(4);
+_currentMap.GenerateRandomExits(4);
             TheCartographer.DrawThisMapPlease(_currentMap, Hero);
             InitGame(_currentMap.GetValidStartLocation(15, 15));
             ConsoleKeyInfo keyInfo;
