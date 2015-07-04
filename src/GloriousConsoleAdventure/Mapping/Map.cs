@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Helpers;
 
@@ -85,8 +86,8 @@ namespace GloriousConsoleAdventure.Mapping
             return Block.EmptySpace;
         }
 
-        //Experimental
-        public void PlaceExit(Block[,] exittingMap, Direction exitDirection)
+        //TODO: East and West
+        public void CloneExit(Block[,] exittingMap, Direction exitDirection)
         {
             switch (exitDirection)
             {
@@ -96,6 +97,7 @@ namespace GloriousConsoleAdventure.Mapping
                         Map[i, MapHeight - 1] = exittingMap[i, 1];
                         if (Map[i, MapHeight - 1] == Block.EmptySpace)
                         {
+                            //if the block above is a wall, remove it to make way, should perhaps check one or two tiles more
                             if (Map[i, MapHeight - 2] == Block.Wall)
                                 Map[i, MapHeight - 2] = Block.EmptySpace;
 
@@ -106,11 +108,12 @@ namespace GloriousConsoleAdventure.Mapping
                     for (int i = 0; i < MapWidth; i++)
                     {
                         Map[i, 1] = exittingMap[i, MapHeight - 1];
+                        //if the block below is a wall, remove it to make way, should perhaps check one or two tiles more
                         if (Map[i, 1] == Block.EmptySpace)
                         {
                             if (Map[i, 2] == Block.Wall)
                                 Map[i, 2] = Block.EmptySpace;
-                            
+
                         }
                     }
                     break;
@@ -120,20 +123,61 @@ namespace GloriousConsoleAdventure.Mapping
                     break;
             }
         }
-        /// <summary>
-        /// Obsolete
-        /// </summary>
-        [Obsolete("Please use PlaceRandomBlock with a Block.Coin")]
-        public void PlaceRandomCoin()
+
+        public void GenerateExit(Direction direction)
         {
-            var randX = _rand.Next(1, MapWidth);
-            var randY = _rand.Next(1, MapHeight);
-            while (IsWall(randX, randY))
+            switch (direction)
             {
-                randX = _rand.Next(1, MapWidth);
-                randY = _rand.Next(1, MapHeight);
+                case Direction.North:
+                    var empties = new List<int>();
+                    for (int x = 0; x < MapWidth - 1; x++)
+                    {
+                        if (Map[x, MapHeight - 4] == Block.EmptySpace)
+                        {
+                            empties.Add(x);
+
+                            ////if the block above is a wall, remove it to make way, should perhaps check one or two tiles more
+                            //if (Map[x, MapHeight - 2] == Block.Wall)
+                            //    Map[x, MapHeight - 2] = Block.EmptySpace;
+                        }
+                    }
+                    if (!empties.Any())
+                    {
+                        for (int i = MapHeight - 5; i < MapHeight - 1; i++)
+                        {
+                            Map[15, i] = Block.EmptySpace;
+                            Map[16, i] = Block.EmptySpace;
+                        }
+                    }
+                    else
+                    {
+                        for (int i = MapHeight - 4; i < MapHeight - 1; i++)
+                        {
+                            Map[empties[0], i] = Block.EmptySpace;
+                            Map[empties[0], i] = Block.EmptySpace;
+                        }
+                    }
+
+                    break;
+                case Direction.South:
+                    for (int i = 0; i < MapWidth; i++)
+                    {
+
+                        //if the block below is a wall, remove it to make way, should perhaps check one or two tiles more
+                        if (Map[i, 1] == Block.EmptySpace)
+                        {
+                            if (Map[i, 2] == Block.Wall)
+                                Map[i, 2] = Block.EmptySpace;
+
+                        }
+                    }
+                    break;
+                case Direction.East:
+                    break;
+                case Direction.West:
+                    break;
             }
-            Map[randX, randY] = Block.Coin;
+
         }
 
         /// <summary>
@@ -216,6 +260,7 @@ namespace GloriousConsoleAdventure.Mapping
             return false;
         }
 
+        //returns true if the position is a mapexit
         public bool IsMapExit(int x, int y)
         {
             if (y == 0 || y == MapHeight || x == 0 || x == MapWidth)
@@ -260,7 +305,7 @@ namespace GloriousConsoleAdventure.Mapping
                 for (column = 0; column < MapWidth; column++)
                 {
                     // If coordinants lie on the the edge of the map (creates a border)
-                    if (column == 0 && row != 10)
+                    if (column == 0)
                     {
                         Map[column, row] = Block.Wall;
                     }

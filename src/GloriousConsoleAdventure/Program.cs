@@ -37,7 +37,8 @@ namespace GloriousConsoleAdventure
             Console.SetWindowSize(80, 30);
             //var map = new MapHandler();
             _currentMap = _map;
-            TheCartographer.DrawThisMapPlease(_currentMap);
+            _currentMap.GenerateExit(Direction.North);
+            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
             InitGame(_currentMap.GetValidStartLocation());
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
@@ -114,7 +115,7 @@ namespace GloriousConsoleAdventure
                     _currentMap = _map2;
                 }
 
-                TheCartographer.DrawMapWithExitsPlease(_currentMap, previousMap.Map, exitDirection);
+                TheCartographer.CloneExitsAndDrawThisMapPlease(_currentMap, previousMap.Map, exitDirection, Hero);
                 //RemoveHero();
                 Console.BackgroundColor = HERO_COLOR;
                 Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
@@ -132,6 +133,8 @@ namespace GloriousConsoleAdventure
                 Hero.Coordinates = heroCoordinate;
                 BlockAction(heroCoordinate);
             }
+            Hero.Steps++;
+            ActionMenu.RenderMenu(Hero);
         }
         /// <summary>
         /// This is a method that checks if a block is hit and what action to run
@@ -148,6 +151,7 @@ namespace GloriousConsoleAdventure
                     var coinPlayer = new System.Media.SoundPlayer(coinPath);
                     coinPlayer.Play();
                     _currentMap.ClearBlock(coordinate.X, coordinate.Y);
+                    Hero.Coins++;
                     break;
                 case Block.Teleport:
                     var teleportPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Teleport + ".wav";
