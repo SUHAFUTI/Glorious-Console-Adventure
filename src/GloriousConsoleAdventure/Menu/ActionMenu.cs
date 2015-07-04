@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GloriousConsoleAdventure.Models.Hero;
 
-namespace GloriousConsoleAdventure
+namespace GloriousConsoleAdventure.Menu
 {
     public class ActionMenu
     {
@@ -20,6 +16,25 @@ namespace GloriousConsoleAdventure
             //Set cursor to inside the menubox
             Console.SetCursorPosition(46, 2);
             Console.WriteLine("{0}", hero.Name);
+
+            //Set cursor to inside the menubox
+            Console.SetCursorPosition(46, 4);
+            Console.WriteLine("Steps taken: {0}", hero.Steps);
+
+            if (hero.Coordinates != null)
+            {
+                //Set cursor to inside the menubox
+                Console.SetCursorPosition(46, 6);
+            #if DEBUG
+                Console.WriteLine("World position: ({0},{1})", hero.Coordinates.X, hero.Coordinates.Y);
+            #endif
+            }
+            if (hero.Coins > 0)
+            {
+                //Set cursor to inside the menubox
+                Console.SetCursorPosition(46, 8);
+                Console.WriteLine("Coins: {0}", hero.Coins);
+            }
         }
 
         private static void Drawborders(int height)
@@ -32,11 +47,11 @@ namespace GloriousConsoleAdventure
             for (int i = 0; i < height; i++)
             {
                 Console.SetCursorPosition(41, y++);
-                Console.WriteLine("║                                    ║");    
+                Console.WriteLine("║                                    ║");
             }
             Console.SetCursorPosition(41, y);
             Console.WriteLine("╚════════════════════════════════════╝");
-            
+
         }
     }
 }
