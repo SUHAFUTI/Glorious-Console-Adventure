@@ -39,7 +39,7 @@ namespace GloriousConsoleAdventure
             _currentMap = _map;
             _currentMap.GenerateExit(Direction.North);
             TheCartographer.DrawThisMapPlease(_currentMap, Hero);
-            InitGame(_currentMap.GetValidStartLocation(10,10));
+            InitGame(_currentMap.GetValidStartLocation(15,15));
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
