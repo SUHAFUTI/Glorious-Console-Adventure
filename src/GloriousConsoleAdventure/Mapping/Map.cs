@@ -1,14 +1,11 @@
-﻿/*´MFEH: I totally stole this! 
- * 
- * Automata procedual dungeon generation proof-of-concept
- *
- *
- * Developed by Adam Rakaska 
+﻿/* * Dungeon generation 
+ * Based on poc made by Adam Rakaska 
  *  http://www.csharpprogramming.tips
  *    http://www.adam-rakaska.codes
- *    
+ * Original mapping   
  * http://www.csharpprogramming.tips/2013/07/Rouge-like-dungeon-generation.html
- * 
+ * Article regarding mapmaking
+ * http://www.roguebasin.com/index.php?title=Cellular_Automata_Method_for_Generating_Random_Cave-Like_Levels
  * 
  */
 
@@ -30,7 +27,13 @@ namespace GloriousConsoleAdventure.Mapping
         public Guid Id { get; set; }
 
         public Block[,] Map;
-
+        /// <summary>
+        /// Handles map related stuff
+        /// </summary>
+        /// <param name="mapWidth">Width of the map</param>
+        /// <param name="mapHeight">Height of the map</param>
+        /// <param name="percentWalls">How much of the map should be walls</param>
+        /// <param name="randomBlocks">List of random blocks to include</param>
         public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null)
         {
             MapWidth = mapWidth;
@@ -46,6 +49,9 @@ namespace GloriousConsoleAdventure.Mapping
                 randomBlocks.ForEach(PlaceRandomBlock);
             }
         }
+        /// <summary>
+        /// Creates cavarns on current map
+        /// </summary>
         public void MakeCaverns()
         {
             // By initilizing column in the outter loop, its only created ONCE
@@ -304,6 +310,9 @@ namespace GloriousConsoleAdventure.Mapping
             }
         }
 
+        /// <summary>
+        /// Randomly fills map
+        /// </summary>
         public void RandomFillMap()
         {
             // New, empty map
