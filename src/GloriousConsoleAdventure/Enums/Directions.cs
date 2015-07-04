@@ -11,6 +11,8 @@ namespace GloriousConsoleAdventure.Enums
         North = 1,
         South = 2,
         East = 3,
-        West = 4
+        West = 4,
+        Up = 5,
+        Down = 6
     }
 }
