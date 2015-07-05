@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Helpers;
 
@@ -25,6 +26,9 @@ namespace GloriousConsoleAdventure.Mapping
         public int MapHeight { get; set; }
         public int PercentAreWalls { get; set; }
         public Guid Id { get; set; }
+        public Palettes MapPalette { get; set; }
+        public List<BlockTile> ActionBlocks { get; set; }
+
         public Block[,] Map;
 
         /// <summary>
@@ -34,12 +38,14 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="mapHeight">Height of the map</param>
         /// <param name="percentWalls">How much of the map should be walls</param>
         /// <param name="randomBlocks">List of random blocks to include</param>
-        public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null)
+        public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null, Palettes mapPalette = Palettes.Cave)
         {
             MapWidth = mapWidth;
             MapHeight = mapHeight;
             PercentAreWalls = percentWalls;
+            MapPalette = mapPalette;
             AdjacentMaps = new Dictionary<Direction, Guid>();
+            ActionBlocks = new List<BlockTile>();
             Id = Guid.NewGuid();
             Map = new Block[MapWidth, MapHeight];
             RandomFillMap();
@@ -312,6 +318,15 @@ namespace GloriousConsoleAdventure.Mapping
             }
 
             Map[randX, randY] = block;
+            Palettes palette;
+            Enum.TryParse(block.ToString(), out palette);
+
+            ActionBlocks.Add(new BlockTile
+            {
+                Block = block,
+                Coordinate = new Coordinate { X = randX, Y = randY },
+                Palette = palette
+            });
         }
         /// <summary>
         /// Returns how many walls are near a coordinate with given scope

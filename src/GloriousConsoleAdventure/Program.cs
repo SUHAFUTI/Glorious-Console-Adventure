@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Mapping;
 using GloriousConsoleAdventure.Menu;
@@ -13,8 +14,6 @@ namespace GloriousConsoleAdventure
 {
     class Program
     {
-        const ConsoleColor HeroColor = ConsoleColor.Cyan;
-        const ConsoleColor BackgroundColor = ConsoleColor.Black;
         private const int MapHeight = 30;
         private const int MapWidth = 40;
 
@@ -134,23 +133,20 @@ namespace GloriousConsoleAdventure
 
                 TheCartographer.CloneExitsAndDrawThisMapPlease(_currentMap, previousMap.Map, exitDirection, Hero);
                 //RemoveHero();
-                Console.BackgroundColor = HeroColor;
-                Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
-                Console.Write(" ");
+                TheArtist.Paint(Palettes.Hero, heroCoordinate, " ");
                 Hero.Coordinates = heroCoordinate;
-
+                Hero.Steps++;
             }
 
             if (CanMove(heroCoordinate))
             {
                 RemoveHero();
-                Console.BackgroundColor = HeroColor;
-                Console.SetCursorPosition(heroCoordinate.X, heroCoordinate.Y);
-                Console.Write(" ");
+                TheArtist.Paint(Palettes.Hero, heroCoordinate, " ");
                 Hero.Coordinates = heroCoordinate;
                 BlockAction(heroCoordinate);
+                Hero.Steps++;
             }
-            Hero.Steps++;
+            
             ActionMenu.RenderMenu(Hero);
         }
         /// <summary>
@@ -185,9 +181,7 @@ namespace GloriousConsoleAdventure
         /// </summary>
         static void RemoveHero()
         {
-            Console.BackgroundColor = BackgroundColor;
-            Console.SetCursorPosition(Hero.Coordinates.X, Hero.Coordinates.Y);
-            Console.Write(" ");
+            TheArtist.Delete(Hero.Coordinates);
         }
         /// <summary>
         /// Make sure that the new coordinate is not placed outside the

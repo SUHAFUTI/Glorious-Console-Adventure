@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Menu;
 using GloriousConsoleAdventure.Models.Hero;
@@ -11,26 +12,36 @@ namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
- 
+
         public static void CloneExitsAndDrawThisMapPlease(MapHandler map, Block[,] exitMap, Direction exitDirection, Hero hero)
         {
             map.CloneExit(exitMap, exitDirection);
-        
-            DrawThisMapPlease(map, hero);            
+
+            DrawThisMapPlease(map, hero);
         }
 
         public static void DrawThisMapPlease(MapHandler map, Hero hero)
         {
 
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.Gray; //Reset due to menu foreground change
             Console.Clear();
             Console.Write(MapToString(map));
+            DrawActionBlocks(map);
             ActionMenu.RenderMenu(hero);
+        }
+
+        private static void DrawActionBlocks(MapHandler map)
+        {
+
+            foreach (var tile in map.ActionBlocks)
+            {
+
+                TheArtist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
+            }
         }
 
         private static string MapToString(MapHandler map, bool debug = false)
         {
+            TheArtist.SetPalette(map.MapPalette);
             string returnString = "";
             if (debug) returnString = string.Join(" ", // Seperator between each element
                                             "Width:",
