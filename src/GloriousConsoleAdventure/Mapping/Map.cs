@@ -71,7 +71,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <returns></returns>
         public Block PlaceWallLogic(int x, int y)
         {
-            int numWalls = GetAdjacentWalls(x, y, 1, 1);
+            int numWalls = GetAdjacentBlocks(x, y, 1, 1, Block.Wall);
 
 
             if (Map[x, y] == Block.Wall)
@@ -321,7 +321,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="scopeX">scope x direction</param>
         /// <param name="scopeY">scope y direction</param>
         /// <returns>amount of walls</returns>
-        public int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
+        public int GetAdjacentBlocks(int x, int y, int scopeX, int scopeY, Block block)
         {
             int startX = x - scopeX;
             int startY = y - scopeY;
@@ -331,7 +331,7 @@ namespace GloriousConsoleAdventure.Mapping
             int iX = startX;
             int iY = startY;
 
-            int wallCounter = 0;
+            int blockCounter = 0;
 
             for (iY = startY; iY <= endY; iY++)
             {
@@ -339,14 +339,24 @@ namespace GloriousConsoleAdventure.Mapping
                 {
                     if (!(iX == x && iY == y))
                     {
-                        if (IsWall(iX, iY))
+                        if (block == Block.Wall)
                         {
-                            wallCounter += 1;
+                            if (IsWall(iX, iY))
+                            {
+                                blockCounter++;
+                            }
+                        }
+                        else
+                        {
+                            if (Map[iX, iY] == block)
+                            {
+                                blockCounter++;
+                            }
                         }
                     }
                 }
             }
-            return wallCounter;
+            return blockCounter;
         }
         /// <summary>
         /// Get blocktype at coordinate
