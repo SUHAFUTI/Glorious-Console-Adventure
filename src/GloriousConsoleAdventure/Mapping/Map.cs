@@ -400,8 +400,12 @@ namespace GloriousConsoleAdventure.Mapping
         /// <returns></returns>
         public bool IsMapExit(int x, int y)
         {
-            if (y == 0 || y == MapHeight || x == 0 || x == MapWidth)
+            if ((y == 0 || y == MapHeight || x == 0 || x == MapWidth))
             {
+                //Check if the block actually is empty before deeming it an exit
+                //I'm not sure why this isn't an issue, with max values 
+                if (y == 0 || x == 0)
+                    return Map[x, y] == Block.EmptySpace;
                 return true;
             }
             return false;
