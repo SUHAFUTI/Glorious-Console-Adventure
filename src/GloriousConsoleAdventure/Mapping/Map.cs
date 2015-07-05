@@ -71,7 +71,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <returns></returns>
         public Block PlaceWallLogic(int x, int y)
         {
-            int numWalls = GetAdjacentWalls(x, y, 1, 1);
+            int numWalls = GetAdjacentBlocks(x, y, 1, 1, Block.Wall);
 
 
             if (Map[x, y] == Block.Wall)
@@ -107,26 +107,31 @@ namespace GloriousConsoleAdventure.Mapping
                 case Direction.North:
                     for (int i = 0; i < MapWidth - 1; i++)
                     {
-                        Map[i, MapHeight - 1] = exittingMap[i, 1];
+                        Map[i, MapHeight - 1] = exittingMap[i, 0];
                         if (Map[i, MapHeight - 1] == Block.EmptySpace)
                         {
-                            //if the block above is a wall, remove it to make way, should perhaps check one or two tiles more
-                            if (Map[i, MapHeight - 2] == Block.Wall)
-                                Map[i, MapHeight - 2] = Block.EmptySpace;
-
+                            var b = 2;
+                            //Keep excavating until we hit EmptySpace to ensure an exit
+                            while (Map[i, MapHeight - b] == Block.Wall)
+                            {
+                                Map[i, MapHeight - b++] = Block.EmptySpace;
+                            }
                         }
                     }
                     break;
                 case Direction.South:
                     for (int i = 0; i < MapWidth; i++)
                     {
-                        Map[i, 1] = exittingMap[i, MapHeight - 1];
+                        Map[i, 0] = exittingMap[i, MapHeight - 1];
                         //if the block below is a wall, remove it to make way, should perhaps check one or two tiles more
-                        if (Map[i, 1] == Block.EmptySpace)
+                        if (Map[i, 0] == Block.EmptySpace)
                         {
-                            if (Map[i, 2] == Block.Wall)
-                                Map[i, 2] = Block.EmptySpace;
-
+                            var b = 1;
+                            //Keep excavating until we hit EmptySpace to ensure an exit
+                            while (Map[i, b] == Block.Wall)
+                            {
+                                Map[i, b++] = Block.EmptySpace;
+                            }
                         }
                     }
                     break;
@@ -135,12 +140,16 @@ namespace GloriousConsoleAdventure.Mapping
                     for (var y = 0; y < MapHeight; y++)
                     {
                         //Map exit from exitmap
-                        Map[1, y] = exittingMap[MapWidth - 1, y];
+                        Map[0, y] = exittingMap[MapWidth - 1, y];
                         //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
-                        if (Map[1, y] == Block.EmptySpace)
+                        if (Map[0, y] == Block.EmptySpace)
                         {
-                            if (Map[2, y] == Block.Wall)
-                                Map[2, y] = Block.EmptySpace;
+                            var b = 1;
+                            //Keep excavating until we hit EmptySpace to ensure an exit
+                            while (Map[b, y] == Block.Wall)
+                            {
+                                Map[b++, y] = Block.EmptySpace;
+                            }
                         }
                     }
                     break;
@@ -149,12 +158,16 @@ namespace GloriousConsoleAdventure.Mapping
                     for (var y = 0; y < MapHeight; y++)
                     {
                         //Map exit from exitmap
-                        Map[MapWidth -1, y] = exittingMap[1 - 1, y];
+                        Map[MapWidth - 1, y] = exittingMap[0, y];
                         //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
-                        if (Map[MapWidth- 1, y] == Block.EmptySpace)
+                        if (Map[MapWidth - 1, y] == Block.EmptySpace)
                         {
-                            if (Map[MapWidth -2, y] == Block.Wall)
-                                Map[MapWidth -2, y] = Block.EmptySpace;
+                            var b = 2;
+                            //Keep excavating until we hit EmptySpace to ensure an exit
+                            while (Map[MapWidth - b, y] == Block.Wall)
+                            {
+                                Map[MapWidth - b++, y] = Block.EmptySpace;
+                            }
                         }
                     }
                     break;
@@ -308,7 +321,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="scopeX">scope x direction</param>
         /// <param name="scopeY">scope y direction</param>
         /// <returns>amount of walls</returns>
-        public int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
+        public int GetAdjacentBlocks(int x, int y, int scopeX, int scopeY, Block block)
         {
             int startX = x - scopeX;
             int startY = y - scopeY;
@@ -318,7 +331,7 @@ namespace GloriousConsoleAdventure.Mapping
             int iX = startX;
             int iY = startY;
 
-            int wallCounter = 0;
+            int blockCounter = 0;
 
             for (iY = startY; iY <= endY; iY++)
             {
@@ -326,14 +339,24 @@ namespace GloriousConsoleAdventure.Mapping
                 {
                     if (!(iX == x && iY == y))
                     {
-                        if (IsWall(iX, iY))
+                        if (block == Block.Wall)
                         {
-                            wallCounter += 1;
+                            if (IsWall(iX, iY))
+                            {
+                                blockCounter++;
+                            }
+                        }
+                        else
+                        {
+                            if (Map[iX, iY] == block)
+                            {
+                                blockCounter++;
+                            }
                         }
                     }
                 }
             }
-            return wallCounter;
+            return blockCounter;
         }
         /// <summary>
         /// Get blocktype at coordinate
@@ -387,8 +410,12 @@ namespace GloriousConsoleAdventure.Mapping
         /// <returns></returns>
         public bool IsMapExit(int x, int y)
         {
-            if (y == 0 || y == MapHeight || x == 0 || x == MapWidth)
+            if ((y == 0 || y == MapHeight || x == 0 || x == MapWidth))
             {
+                //Check if the block actually is empty before deeming it an exit
+                //I'm not sure why this isn't an issue, with max values 
+                if (y == 0 || x == 0)
+                    return Map[x, y] == Block.EmptySpace;
                 return true;
             }
             return false;
