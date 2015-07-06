@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Helpers;
@@ -21,39 +22,17 @@ namespace GloriousConsoleAdventure.Mapping
     public class MapHandler
     {
         private readonly Random _rand = MagicNumberHat.Random;
-        //Moved to Map
-        //public Dictionary<Direction, Guid> AdjacentMaps { get; set; }
-        //public int MapWidth { get; set; }
-        //public int MapHeight { get; set; }
-        //public int PercentAreWalls { get; set; }
-        //Moved to Map
-        //public Guid Id { get; set; }
+
         public Palettes MapPalette { get; set; }
-       
         /// <summary>
-        /// Handles map related stuff
+        /// Creates a new map
         /// </summary>
-        /// <param name="mapWidth">Width of the map</param>
-        /// <param name="mapHeight">Height of the map</param>
-        /// <param name="percentWalls">How much of the map should be walls</param>
-        /// <param name="randomBlocks">List of random blocks to include</param>
-        //public MapHandler(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null, Palettes mapPalette = Palettes.Cave)
-        //{
-        //    MapWidth = mapWidth;
-        //    MapHeight = mapHeight;
-        //    PercentAreWalls = percentWalls;
-        //    MapPalette = mapPalette;
-        //   // AdjacentMaps = new Dictionary<Direction, Guid>();
-        //    ActionBlocks = new List<BlockTile>();
-        //   // Id = Guid.NewGuid();
-        //    //Map = new Block[MapWidth, MapHeight];
-        //    RandomFillMap();
-        //    MakeCaverns();
-        //    if (randomBlocks != null)
-        //    {
-        //        randomBlocks.ForEach(PlaceRandomBlock);
-        //    }
-        //}
+        /// <param name="mapWidth">Width</param>
+        /// <param name="mapHeight">Height</param>
+        /// <param name="percentWalls">Percent walls</param>
+        /// <param name="randomBlocks">Randomblocks to include, default is null</param>
+        /// <param name="mapPalette">Palette to use</param>
+        /// <returns>Generated map</returns>
         public Map CreateMap(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null, Palettes mapPalette = Palettes.Cave)
         {
             var map = new Map
@@ -64,14 +43,14 @@ namespace GloriousConsoleAdventure.Mapping
                 MapPalette = mapPalette,
                 ActionBlocks = new List<BlockTile>()
             };
-            //  MapWidth = mapWidth;
-            //   MapHeight = mapHeight;
-            //   PercentAreWalls = percentWalls;
             map = RandomFillMap(map, percentWalls);
             map = MakeCaverns(map);
+            if (randomBlocks != null)
+            {
+                map = randomBlocks.Aggregate(map, (current, randomBlock) => PlaceRandomBlock(randomBlock, current));
+            }
             return map;
         }
-
         /// <summary>
         /// Creates cavarns on current map
         /// </summary>
@@ -328,7 +307,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// Places a random block on the map
         /// </summary>
         /// <param name="block">Takes a block</param>
-        public void PlaceRandomBlock(Block block, Map map)
+        public Map PlaceRandomBlock(Block block, Map map)
         {
             var randX = _rand.Next(1,  map.MapWidth);
             var randY = _rand.Next(1, map.MapHeight);
@@ -348,6 +327,7 @@ namespace GloriousConsoleAdventure.Mapping
                 Coordinate = new Coordinate { X = randX, Y = randY },
                 Palette = palette
             });
+            return map;
         }
         /// <summary>
         /// Returns how many walls are near a coordinate with given scope
