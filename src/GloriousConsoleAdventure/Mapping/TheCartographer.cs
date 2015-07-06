@@ -42,26 +42,27 @@ namespace GloriousConsoleAdventure.Mapping
         private static string MapToString(MapHandler map, bool debug = false)
         {
             TheArtist.SetPalette(map.MapPalette);
-            string returnString = "";
-            if (debug) returnString = string.Join(" ", // Seperator between each element
-                                            "Width:",
-                                            map.MapWidth.ToString(),
-                                            "\tHeight:",
-                                            map.MapHeight.ToString(),
-                                            "\t% Walls:",
-                                            map.PercentAreWalls.ToString(),
-                                            Environment.NewLine
-                                           );
+            var returnString = new StringBuilder();
+            if (debug)
+                returnString.Append(string.Join(" ", // Seperator between each element
+                    "Width:",
+                    map.MapWidth.ToString(),
+                    "\tHeight:",
+                    map.MapHeight.ToString(),
+                    "\t% Walls:",
+                    map.PercentAreWalls.ToString(),
+                    Environment.NewLine
+                    ));
 
             for (int column = 0, row = 0; row < map.MapHeight; row++)
             {
                 for (column = 0; column < map.MapWidth; column++)
                 {
-                    returnString += Rendering.MapSymbols[map.Map[column, row]];
+                    returnString.Append(Rendering.MapSymbols[map.Map[column, row]]);
                 }
-                returnString += Environment.NewLine;
+                returnString.Append(Environment.NewLine);
             }
-            return returnString;
+            return returnString.ToString();
         }
     }
 }
