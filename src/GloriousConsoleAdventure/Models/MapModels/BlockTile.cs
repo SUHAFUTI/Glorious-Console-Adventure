@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GloriousConsoleAdventure.Color;
+﻿using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
 
-namespace GloriousConsoleAdventure.Mapping
+namespace GloriousConsoleAdventure.Models.MapModels
 {
     public class BlockTile
     {

@@ -7,20 +7,22 @@ using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Menu;
 using GloriousConsoleAdventure.Models.Hero;
+using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
 
-        public static void CloneExitsAndDrawThisMapPlease(MapHandler map, Block[,] exitMap, Direction exitDirection, Hero hero)
+        public static Map CloneExitsAndDrawThisMapPlease(Map map, Block[,] exitMap, Direction exitDirection, Hero hero)
         {
-            map.CloneExit(exitMap, exitDirection);
 
+            map = MapHandler.CloneExit(exitMap, exitDirection, map);
             DrawThisMapPlease(map, hero);
+            return map;
         }
 
-        public static void DrawThisMapPlease(MapHandler map, Hero hero)
+        public static void DrawThisMapPlease(Map map, Hero hero)
         {
 
             Console.Clear();
@@ -29,17 +31,15 @@ namespace GloriousConsoleAdventure.Mapping
             ActionMenu.RenderMenu(hero);
         }
 
-        private static void DrawActionBlocks(MapHandler map)
+        private static void DrawActionBlocks(Map map)
         {
-
             foreach (var tile in map.ActionBlocks)
             {
-
                 TheArtist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
             }
         }
 
-        private static string MapToString(MapHandler map, bool debug = false)
+        private static string MapToString(Map map, bool debug = false)
         {
             TheArtist.SetPalette(map.MapPalette);
             var returnString = new StringBuilder();
@@ -50,7 +50,7 @@ namespace GloriousConsoleAdventure.Mapping
                     "\tHeight:",
                     map.MapHeight.ToString(),
                     "\t% Walls:",
-                    map.PercentAreWalls.ToString(),
+                    map.WallPercentage.ToString(),
                     Environment.NewLine
                     ));
 
@@ -58,7 +58,7 @@ namespace GloriousConsoleAdventure.Mapping
             {
                 for (column = 0; column < map.MapWidth; column++)
                 {
-                    returnString.Append(Rendering.MapSymbols[map.Map[column, row]]);
+                    returnString.Append(Rendering.MapSymbols[map.MapBlocks[column, row]]);
                 }
                 returnString.Append(Environment.NewLine);
             }

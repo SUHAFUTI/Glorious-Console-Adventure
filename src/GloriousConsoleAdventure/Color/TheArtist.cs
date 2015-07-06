@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Mapping;
+using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure.Color
 {

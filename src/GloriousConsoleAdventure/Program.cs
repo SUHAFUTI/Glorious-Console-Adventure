@@ -9,6 +9,7 @@ using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Mapping;
 using GloriousConsoleAdventure.Menu;
 using GloriousConsoleAdventure.Models.Hero;
+using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure
 {
@@ -24,10 +25,12 @@ namespace GloriousConsoleAdventure
             Block.Teleport
         };
 
-        static readonly MapHandler Map = new MapHandler(MapWidth, MapHeight, 40, RandomBlockConfiguration);
-        private static MapHandler _currentMap;
+        //static readonly MapHandler Map = new MapHandler(MapWidth, MapHeight, 40, RandomBlockConfiguration);
+        private static readonly MapHandler MapHandler = new MapHandler();
+        private static Map _currentMap;
         public static Hero Hero { get; set; }
-        public static Dictionary<Guid, MapHandler> MapDictionary;
+        //public static Dictionary<Guid, MapHandler> MapDictionary;
+        private static World _world;
 
         static void Main(string[] args)
         {
@@ -35,19 +38,24 @@ namespace GloriousConsoleAdventure
             Console.CursorVisible = false;
             //Init hero
             Hero = new Hero("Herald Grimrian");
-            MapDictionary = new Dictionary<Guid, MapHandler>() { { Map.Id, Map } };
             //Height has to be 1 more than map
             Console.SetWindowSize(80, 31);
-            //var map = new MapHandler();
-            _currentMap = Map;
-            _currentMap.GenerateExit(Direction.North);
-            _currentMap.GenerateExit(Direction.South);
-            _currentMap.GenerateExit(Direction.East);
-            _currentMap.GenerateExit(Direction.West);
-            //Not used.. yet
-           // _currentMap.GenerateRandomExits(4);
+
+            //Create map
+            _currentMap = MapHandler.CreateMap(MapWidth, MapHeight, 40, RandomBlockConfiguration);
+            //Init new world from 0,0
+            _world = new World { WhereAmI = new Coordinate(0, 0), MapGrid = new Dictionary<Coordinate, Map>() };
+            _world.MapGrid.Add(new Coordinate(0, 0), _currentMap);
+
+
+            _currentMap = MapHandler.GenerateExit(Direction.North, _currentMap);
+            _currentMap = MapHandler.GenerateExit(Direction.South, _currentMap);
+            _currentMap = MapHandler.GenerateExit(Direction.East, _currentMap);
+            _currentMap = MapHandler.GenerateExit(Direction.West, _currentMap);
+
+            //_currentMap = MapHandler.GenerateRandomExits(_currentMap, 4);
             TheCartographer.DrawThisMapPlease(_currentMap, Hero);
-            InitGame(_currentMap.GetValidStartLocation(15, 15));
+            InitGame(MapHandler.GetValidStartLocation(15, 15, _currentMap));
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
@@ -84,10 +92,10 @@ namespace GloriousConsoleAdventure
                 Y = Hero.Coordinates.Y + y
             };
 
-            if (_currentMap.IsMapExit(heroCoordinate.X, heroCoordinate.Y))
+            if (MapHandler.IsMapExit(heroCoordinate.X, heroCoordinate.Y, _currentMap))
             {
-                Direction exitDirection = Direction.North;
-                Direction entryDirection = Direction.South;
+                var exitDirection = Direction.North;
+                var entryDirection = Direction.South;
                 //If X is 0 we go west
                 if (heroCoordinate.X == 0)
                 {
@@ -112,50 +120,100 @@ namespace GloriousConsoleAdventure
                 //If x is the height we go South
                 if (heroCoordinate.Y == _currentMap.MapHeight)
                 {
-                    exitDirection = Direction.South;
                     entryDirection = Direction.North;
                     heroCoordinate.Y = 1;
                 }
-                var previousMap = _currentMap;
-
-                if (_currentMap.AdjacentMaps.ContainsKey(exitDirection) && MapDictionary.ContainsKey(_currentMap.AdjacentMaps[exitDirection]))
+                Coordinate coordinate;
+                switch (entryDirection)
                 {
-                    _currentMap = MapDictionary[_currentMap.AdjacentMaps[exitDirection]];
-                }
-                else
-                {
-                    MapHandler nextMap = new MapHandler(40, 30, 40, RandomBlockConfiguration);
-                    MapDictionary.Add(nextMap.Id, nextMap);
-                    _currentMap.AdjacentMaps.Add(exitDirection, nextMap.Id);
-                    nextMap.AdjacentMaps.Add(entryDirection, _currentMap.Id);
-                    _currentMap = nextMap;
-                }
+                    case Direction.North:
+                        coordinate = new Coordinate(_world.WhereAmI.X, _world.WhereAmI.Y - 1);
+                        if (_world.MapGrid.ContainsKey(coordinate))
+                        {
+                            _currentMap = _world.MapGrid[coordinate];
+                            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+                        }
+                        else
+                        {
+                            GenerateNextMap(coordinate, Direction.South);
+                        }
+                        break;
+                    case Direction.South:
+                        coordinate = new Coordinate(_world.WhereAmI.X, _world.WhereAmI.Y + 1);
+                        if (_world.MapGrid.ContainsKey(coordinate))
+                        {
+                            _currentMap = _world.MapGrid[coordinate];
+                            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+                        }
+                        else
+                        {
+                            GenerateNextMap(coordinate, Direction.North);
+                        }
+                        break;
+                    case Direction.East:
+                        coordinate = new Coordinate(_world.WhereAmI.X + 1, _world.WhereAmI.Y);
+                        if (_world.MapGrid.ContainsKey(coordinate))
+                        {
+                            _currentMap = _world.MapGrid[coordinate];
+                            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+                        }
+                        else
+                        {
+                            GenerateNextMap(coordinate, Direction.West);
+                        }
+                        break;
+                    case Direction.West:
+                        coordinate = new Coordinate(_world.WhereAmI.X - 1, _world.WhereAmI.Y);
+                        if (_world.MapGrid.ContainsKey(coordinate))
+                        {
+                            _currentMap = _world.MapGrid[coordinate];
+                            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+                        }
+                        else
+                        {
+                            GenerateNextMap(coordinate, Direction.East);
+                        }
 
-                TheCartographer.CloneExitsAndDrawThisMapPlease(_currentMap, previousMap.Map, exitDirection, Hero);
-                //RemoveHero();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                //Update coordinates on where I am in the world
+                _world.WhereAmI = coordinate;
                 TheArtist.Paint(Palettes.Hero, heroCoordinate, " ");
                 Hero.Coordinates = heroCoordinate;
                 Hero.Steps++;
             }
 
-            if (CanMove(heroCoordinate))
+            if (CanMove(heroCoordinate, _currentMap))
             {
                 RemoveHero();
                 TheArtist.Paint(Palettes.Hero, heroCoordinate, " ");
                 Hero.Coordinates = heroCoordinate;
-                BlockAction(heroCoordinate);
+                BlockAction(heroCoordinate, _currentMap);
                 Hero.Steps++;
             }
-            
+
             ActionMenu.RenderMenu(Hero);
         }
+
+        public static void GenerateNextMap(Coordinate coordinate, Direction exitDirection)
+        {
+            var nextmap = MapHandler.CreateMap(MapWidth, MapHeight, 40, RandomBlockConfiguration);
+            nextmap = TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, _currentMap.MapBlocks, exitDirection, Hero);
+            _world.MapGrid.Add(coordinate, nextmap);
+            //Set current map to the next
+            _currentMap = nextmap;
+        }
+
         /// <summary>
         /// This is a method that checks if a block is hit and what action to run
         /// </summary>
         /// <param name="coordinate"></param>
-        private static void BlockAction(Coordinate coordinate)
+        /// <param name="map">Map to run blockaction on</param>
+        private static void BlockAction(Coordinate coordinate, Map map)
         {
-            var block = _currentMap.GetCurrentBlock(coordinate.X, coordinate.Y);
+            var block = MapHandler.GetCurrentBlock(coordinate.X, coordinate.Y, map);
 
             switch (block)
             {
@@ -163,14 +221,14 @@ namespace GloriousConsoleAdventure
                     var coinPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Coin + ".wav";
                     var coinPlayer = new System.Media.SoundPlayer(coinPath);
                     coinPlayer.Play();
-                    _currentMap.ClearBlock(coordinate.X, coordinate.Y);
+                    MapHandler.ClearBlock(coordinate.X, coordinate.Y, map);
                     Hero.Coins++;
                     break;
                 case Block.Teleport:
                     var teleportPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Teleport + ".wav";
                     var teleportPlayer = new System.Media.SoundPlayer(teleportPath);
                     teleportPlayer.Play();
-                    _currentMap.ClearBlock(coordinate.X, coordinate.Y);
+                    MapHandler.ClearBlock(coordinate.X, coordinate.Y, map);
                     //TODO teleport
                     break;
             }
@@ -187,9 +245,9 @@ namespace GloriousConsoleAdventure
         /// Make sure that the new coordinate is not placed outside the
         /// console window (since that will cause a runtime crash
         /// </summary>
-        static bool CanMove(Coordinate c)
+        static bool CanMove(Coordinate c, Map map)
         {
-            if (_currentMap.IsWall(c.X, c.Y)) return false;
+            if (MapHandler.IsWall(c.X, c.Y, map)) return false;
             if (c.X < 0 || c.X >= Console.WindowWidth)
                 return false;
 
