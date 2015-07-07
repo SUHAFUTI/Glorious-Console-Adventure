@@ -111,8 +111,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="exittingMap">Map to clone from</param>
         /// <param name="exitDirection">Direction from which we came</param>
         /// <param name="map">Map to update</param>
-        /// <returns>Updated map</returns>
-        public static Map CloneExit(Block[,] exittingMap, Direction exitDirection, Map map)
+        public static void CloneExit(Block[,] exittingMap, Direction exitDirection, Map map)
         {
             switch (exitDirection)
             {
@@ -184,7 +183,6 @@ namespace GloriousConsoleAdventure.Mapping
                     }
                     break;
             }
-            return map;
         }
 
         /// <summary>
@@ -192,8 +190,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// </summary>
         /// <param name="direction">Which direction the exit should appear</param>
         /// <param name="map">Map to generate exit on</param>
-        /// <returns>Updated map</returns>
-        public static Map GenerateExit(Direction direction, Map map)
+        public static void GenerateExit(Direction direction, Map map)
         {
             var foundExit = false;
             switch (direction)
@@ -299,7 +296,6 @@ namespace GloriousConsoleAdventure.Mapping
                     }
                     break;
             }
-            return map;
         }
 
         /// <summary>
@@ -307,16 +303,14 @@ namespace GloriousConsoleAdventure.Mapping
         /// </summary>
         /// <param name="map">Map to generate exits on</param>
         /// <param name="exits">Amount of exits</param>
-        /// <returns>Updated map</returns>
-        public static Map GenerateRandomExits(Map map, int exits)
+        public static void GenerateRandomExits(Map map, int exits)
         {
             for (var i = 0; i <= exits; i++)
             {
                 var values = Enum.GetValues(typeof(Direction));
                 var exit = (Direction)values.GetValue(MagicNumberHat.Random.Next(values.Length));
-                map = GenerateExit(exit, map);
+                GenerateExit(exit, map);
             }
-            return map;
         }
 
         /// <summary>
@@ -470,7 +464,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="y">y coorindate</param>
         /// <param name="map">map to check</param>
         /// <returns>true if out of bounds</returns>
-        bool IsOutOfBounds(int x, int y, Map map)
+        static bool IsOutOfBounds(int x, int y, Map map)
         {
             if (x < 0 || y < 0)
             {
@@ -484,9 +478,10 @@ namespace GloriousConsoleAdventure.Mapping
         }
 
         /// <summary>
-        /// Generates a blank map
+        /// Takes provided map and blanks it out
         /// </summary>
-        public Map BlankMap(Map map)
+        /// <param name="map">Map to blank out</param>
+        public void BlankMap(Map map)
         {
             for (int column = 0, row = 0; row < map.MapHeight; row++)
             {
@@ -495,7 +490,6 @@ namespace GloriousConsoleAdventure.Mapping
                     map.MapBlocks[column, row] = Block.EmptySpace;
                 }
             }
-            return map;
         }
 
         /// <summary>

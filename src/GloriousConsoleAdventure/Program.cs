@@ -48,10 +48,10 @@ namespace GloriousConsoleAdventure
             _world.MapGrid.Add(new Coordinate(0, 0), _currentMap);
 
 
-            _currentMap = MapHandler.GenerateExit(Direction.North, _currentMap);
-            _currentMap = MapHandler.GenerateExit(Direction.South, _currentMap);
-            _currentMap = MapHandler.GenerateExit(Direction.East, _currentMap);
-            _currentMap = MapHandler.GenerateExit(Direction.West, _currentMap);
+            MapHandler.GenerateExit(Direction.North, _currentMap);
+            MapHandler.GenerateExit(Direction.South, _currentMap);
+            MapHandler.GenerateExit(Direction.East, _currentMap);
+            MapHandler.GenerateExit(Direction.West, _currentMap);
 
             //_currentMap = MapHandler.GenerateRandomExits(_currentMap, 4);
             TheCartographer.DrawThisMapPlease(_currentMap, Hero);

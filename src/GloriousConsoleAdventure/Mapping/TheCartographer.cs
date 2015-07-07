@@ -17,7 +17,7 @@ namespace GloriousConsoleAdventure.Mapping
         public static Map CloneExitsAndDrawThisMapPlease(Map map, Block[,] exitMap, Direction exitDirection, Hero hero)
         {
 
-            map = MapHandler.CloneExit(exitMap, exitDirection, map);
+            MapHandler.CloneExit(exitMap, exitDirection, map);
             DrawThisMapPlease(map, hero);
             return map;
         }
