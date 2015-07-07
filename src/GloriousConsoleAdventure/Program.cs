@@ -197,10 +197,11 @@ namespace GloriousConsoleAdventure
             ActionMenu.RenderMenu(Hero);
         }
 
-        public static void GenerateNextMap(Coordinate coordinate, Direction exitDirection)
+        private static void GenerateNextMap(Coordinate coordinate, Direction exitDirection)
         {
             var nextmap = MapHandler.CreateMap(MapWidth, MapHeight, 40, RandomBlockConfiguration);
-            nextmap = TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, _currentMap.MapBlocks, exitDirection, Hero);
+            MapHandler.GenerateRandomExitDirection(nextmap, 1);
+            TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, _currentMap.MapBlocks, exitDirection, Hero);
             _world.MapGrid.Add(coordinate, nextmap);
             //Set current map to the next
             _currentMap = nextmap;

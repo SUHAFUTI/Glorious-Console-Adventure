@@ -14,12 +14,10 @@ namespace GloriousConsoleAdventure.Mapping
     public static class TheCartographer
     {
 
-        public static Map CloneExitsAndDrawThisMapPlease(Map map, Block[,] exitMap, Direction exitDirection, Hero hero)
+        public static void CloneExitsAndDrawThisMapPlease(Map map, Block[,] exitMap, Direction exitDirection, Hero hero)
         {
-
             MapHandler.CloneExit(exitMap, exitDirection, map);
             DrawThisMapPlease(map, hero);
-            return map;
         }
 
         public static void DrawThisMapPlease(Map map, Hero hero)

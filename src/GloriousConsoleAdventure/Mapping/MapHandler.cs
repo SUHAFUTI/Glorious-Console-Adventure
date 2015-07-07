@@ -303,7 +303,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// </summary>
         /// <param name="map">Map to generate exits on</param>
         /// <param name="exits">Amount of exits</param>
-        public static void GenerateRandomExits(Map map, int exits)
+        public static void GenerateRandomExitDirection(Map map, int exits)
         {
             for (var i = 0; i <= exits; i++)
             {
