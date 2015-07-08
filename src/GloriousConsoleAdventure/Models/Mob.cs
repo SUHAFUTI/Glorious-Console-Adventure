@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Mapping;
+using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure.Models
 {

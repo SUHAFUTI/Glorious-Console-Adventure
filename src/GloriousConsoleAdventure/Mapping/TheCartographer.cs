@@ -3,54 +3,64 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Menu;
 using GloriousConsoleAdventure.Models.Hero;
+using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
- 
-        public static void CloneExitsAndDrawThisMapPlease(MapHandler map, Block[,] exitMap, Direction exitDirection, Hero hero)
+
+        public static void CloneExitsAndDrawThisMapPlease(Map map, Block[,] exitMap, Direction exitDirection, Hero hero)
         {
-            map.CloneExit(exitMap, exitDirection);
-        
-            DrawThisMapPlease(map, hero);            
+            MapHandler.CloneExit(exitMap, exitDirection, map);
+            DrawThisMapPlease(map, hero);
         }
 
-        public static void DrawThisMapPlease(MapHandler map, Hero hero)
+        public static void DrawThisMapPlease(Map map, Hero hero)
         {
 
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.Gray; //Reset due to menu foreground change
             Console.Clear();
             Console.Write(MapToString(map));
+            DrawActionBlocks(map);
             ActionMenu.RenderMenu(hero);
         }
 
-        private static string MapToString(MapHandler map, bool debug = false)
+        private static void DrawActionBlocks(Map map)
         {
-            string returnString = "";
-            if (debug) returnString = string.Join(" ", // Seperator between each element
-                                            "Width:",
-                                            map.MapWidth.ToString(),
-                                            "\tHeight:",
-                                            map.MapHeight.ToString(),
-                                            "\t% Walls:",
-                                            map.PercentAreWalls.ToString(),
-                                            Environment.NewLine
-                                           );
+            foreach (var tile in map.ActionBlocks)
+            {
+                TheArtist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
+            }
+        }
+
+        private static string MapToString(Map map, bool debug = false)
+        {
+            TheArtist.SetPalette(map.MapPalette);
+            var returnString = new StringBuilder();
+            if (debug)
+                returnString.Append(string.Join(" ", // Seperator between each element
+                    "Width:",
+                    map.MapWidth.ToString(),
+                    "\tHeight:",
+                    map.MapHeight.ToString(),
+                    "\t% Walls:",
+                    map.WallPercentage.ToString(),
+                    Environment.NewLine
+                    ));
 
             for (int column = 0, row = 0; row < map.MapHeight; row++)
             {
                 for (column = 0; column < map.MapWidth; column++)
                 {
-                    returnString += Rendering.MapSymbols[map.Map[column, row]];
+                    returnString.Append(Rendering.MapSymbols[map.MapBlocks[column, row]]);
                 }
-                returnString += Environment.NewLine;
+                returnString.Append(Environment.NewLine);
             }
-            return returnString;
+            return returnString.ToString();
         }
     }
 }
