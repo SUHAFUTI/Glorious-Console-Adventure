@@ -17,7 +17,6 @@ namespace GloriousConsoleAdventure
     {
         private const int MapHeight = 30;
         private const int MapWidth = 40;
-
         private static readonly List<Block> RandomBlockConfiguration = new List<Block>
         {
             Block.Coin,
