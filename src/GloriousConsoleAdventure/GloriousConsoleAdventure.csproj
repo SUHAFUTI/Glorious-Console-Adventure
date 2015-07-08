@@ -73,7 +73,9 @@
     <Content Include="Audio\coin.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Audio\concrete_step.wav" />
+    <Content Include="Audio\concrete_step.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Audio\teleport.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
