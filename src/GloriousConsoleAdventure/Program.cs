@@ -53,7 +53,7 @@ namespace GloriousConsoleAdventure
             MapHandler.GenerateExit(Direction.West, _currentMap);
 
             //_currentMap = MapHandler.GenerateRandomExits(_currentMap, 4);
-            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+            TheCartographer.DrawThisMapPlease(_currentMap, Hero, _world);
             InitGame(MapHandler.GetValidStartLocation(15, 15, _currentMap));
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
@@ -130,7 +130,7 @@ namespace GloriousConsoleAdventure
                         if (_world.MapGrid.ContainsKey(coordinate))
                         {
                             _currentMap = _world.MapGrid[coordinate];
-                            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+                            TheCartographer.DrawThisMapPlease(_currentMap, Hero, _world);
                         }
                         else
                         {
@@ -142,7 +142,7 @@ namespace GloriousConsoleAdventure
                         if (_world.MapGrid.ContainsKey(coordinate))
                         {
                             _currentMap = _world.MapGrid[coordinate];
-                            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+                            TheCartographer.DrawThisMapPlease(_currentMap, Hero, _world);
                         }
                         else
                         {
@@ -154,7 +154,7 @@ namespace GloriousConsoleAdventure
                         if (_world.MapGrid.ContainsKey(coordinate))
                         {
                             _currentMap = _world.MapGrid[coordinate];
-                            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+                            TheCartographer.DrawThisMapPlease(_currentMap, Hero, _world);
                         }
                         else
                         {
@@ -166,7 +166,7 @@ namespace GloriousConsoleAdventure
                         if (_world.MapGrid.ContainsKey(coordinate))
                         {
                             _currentMap = _world.MapGrid[coordinate];
-                            TheCartographer.DrawThisMapPlease(_currentMap, Hero);
+                            TheCartographer.DrawThisMapPlease(_currentMap, Hero, _world);
                         }
                         else
                         {
@@ -193,14 +193,14 @@ namespace GloriousConsoleAdventure
                 Hero.Steps++;
             }
 
-            ActionMenu.RenderMenu(Hero);
+            ActionMenu.RenderMenu(Hero, _world);
         }
 
         private static void GenerateNextMap(Coordinate coordinate, Direction exitDirection)
         {
             var nextmap = MapHandler.CreateMap(MapWidth, MapHeight, 40, RandomBlockConfiguration);
             MapHandler.GenerateRandomExitDirection(nextmap, 1);
-            TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, _currentMap.MapBlocks, exitDirection, Hero);
+            TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, _currentMap.MapBlocks, exitDirection, Hero, _world);
             _world.MapGrid.Add(coordinate, nextmap);
             //Set current map to the next
             _currentMap = nextmap;
@@ -282,7 +282,7 @@ namespace GloriousConsoleAdventure
             }
 
             MoveHero(0, 0);
-            ActionMenu.RenderMenu(Hero);
+            ActionMenu.RenderMenu(Hero, _world);
 
         }
     }

@@ -1,11 +1,12 @@
 ﻿using System;
 using GloriousConsoleAdventure.Models.Hero;
+using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure.Menu
 {
     public class ActionMenu
     {
-        public static void RenderMenu(Hero hero)
+        public static void RenderMenu(Hero hero, World world)
         {
             //Todo: We need to move coloring to some global setting
             Console.BackgroundColor = ConsoleColor.Black;
@@ -25,9 +26,11 @@ namespace GloriousConsoleAdventure.Menu
             {
                 //Set cursor to inside the menubox
                 Console.SetCursorPosition(46, 6);
-            #if DEBUG
-                Console.WriteLine("World position: ({0},{1})", hero.Coordinates.X, hero.Coordinates.Y);
-            #endif
+#if DEBUG
+                Console.WriteLine("Map position: ({0},{1})", hero.Coordinates.X, hero.Coordinates.Y);
+                Console.SetCursorPosition(46, 8);
+                Console.WriteLine("World position: ({0},{1})", world.WhereAmI.X, world.WhereAmI.Y);
+#endif
             }
             if (hero.Coins > 0)
             {

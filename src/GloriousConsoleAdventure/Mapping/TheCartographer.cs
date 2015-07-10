@@ -14,19 +14,19 @@ namespace GloriousConsoleAdventure.Mapping
     public static class TheCartographer
     {
 
-        public static void CloneExitsAndDrawThisMapPlease(Map map, Block[,] exitMap, Direction exitDirection, Hero hero)
+        public static void CloneExitsAndDrawThisMapPlease(Map map, Block[,] exitMap, Direction exitDirection, Hero hero, World world)
         {
             MapHandler.CloneExit(exitMap, exitDirection, map);
-            DrawThisMapPlease(map, hero);
+            DrawThisMapPlease(map, hero, world);
         }
 
-        public static void DrawThisMapPlease(Map map, Hero hero)
+        public static void DrawThisMapPlease(Map map, Hero hero, World world)
         {
 
             Console.Clear();
             Console.Write(MapToString(map));
             DrawActionBlocks(map);
-            ActionMenu.RenderMenu(hero);
+            ActionMenu.RenderMenu(hero, world);
         }
 
         private static void DrawActionBlocks(Map map)
