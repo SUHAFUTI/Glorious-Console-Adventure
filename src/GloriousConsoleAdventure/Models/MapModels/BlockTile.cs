@@ -3,6 +3,9 @@ using GloriousConsoleAdventure.Enums;
 
 namespace GloriousConsoleAdventure.Models.MapModels
 {
+    /// <summary>
+    /// A block tile
+    /// </summary>
     public class BlockTile
     {
         public Coordinate Coordinate { get; set; }

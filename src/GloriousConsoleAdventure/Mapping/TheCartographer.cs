@@ -11,6 +11,9 @@ using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure.Mapping
 {
+    /// <summary>
+    /// Handles map related stuff
+    /// </summary>
     public static class TheCartographer
     {
         /// <summary>

@@ -5,6 +5,9 @@ using GloriousConsoleAdventure.Enums;
 
 namespace GloriousConsoleAdventure.Models.MapModels
 {
+    /// <summary>
+    /// Basic map entity. Holds all the information for a map.
+    /// </summary>
     public class Map
     {
         public Block[,] MapBlocks { get; set; }

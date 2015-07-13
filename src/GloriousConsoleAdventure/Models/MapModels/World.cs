@@ -12,8 +12,9 @@ namespace GloriousConsoleAdventure.Models.MapModels
         /// </summary>
         public Dictionary<Coordinate, Map> MapGrid { get; set; }
 
+        /// <summary>
+        /// Where am I in this vast world!?!
+        /// </summary>
         public Coordinate WhereAmI { get; set; }
     }
-
-
 }
