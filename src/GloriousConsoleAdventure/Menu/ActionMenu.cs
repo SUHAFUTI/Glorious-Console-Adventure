@@ -24,11 +24,11 @@ namespace GloriousConsoleAdventure.Menu
 
             if (hero.Coordinates != null)
             {
-                //Set cursor to inside the menubox
-                Console.SetCursorPosition(46, 6);
 #if DEBUG
+                //Set cursor to inside the menubox
+                Console.SetCursorPosition(46, 27);
                 Console.WriteLine("Map position: ({0},{1})", hero.Coordinates.X, hero.Coordinates.Y);
-                Console.SetCursorPosition(46, 8);
+                Console.SetCursorPosition(46, 28);
                 Console.WriteLine("World position: ({0},{1})", world.WhereAmI.X, world.WhereAmI.Y);
 #endif
             }
