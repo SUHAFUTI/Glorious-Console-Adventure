@@ -6,6 +6,11 @@ namespace GloriousConsoleAdventure.Menu
 {
     public class ActionMenu
     {
+        /// <summary>
+        /// Renders the action menu on the right
+        /// </summary>
+        /// <param name="hero">Hero stuff to render</param>
+        /// <param name="world">World stuff to render</param>
         public static void RenderMenu(Hero hero, World world)
         {
             //Todo: We need to move coloring to some global setting
@@ -40,10 +45,14 @@ namespace GloriousConsoleAdventure.Menu
             }
         }
 
+        /// <summary>
+        /// Draws the border around the right action menu
+        /// </summary>
+        /// <param name="height">How high do you want it?</param>
         private static void Drawborders(int height)
         {
-            int x = 41;
-            int y = 1;
+            var x = 41;
+            var y = 1;
             // 205 ═, 201 ╔, 188 ╝, 187 ╗, 200 ╚, 186 ║
             Console.SetCursorPosition(x, y++);
             Console.WriteLine("╔════════════════════════════════════╗");

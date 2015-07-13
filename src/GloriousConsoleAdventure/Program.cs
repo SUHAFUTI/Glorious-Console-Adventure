@@ -23,12 +23,9 @@ namespace GloriousConsoleAdventure
             Block.Teleport,
             Block.Teleport
         };
-
-        //static readonly MapHandler Map = new MapHandler(MapWidth, MapHeight, 40, RandomBlockConfiguration);
         private static readonly MapHandler MapHandler = new MapHandler();
         private static Map _currentMap;
         public static Hero Hero { get; set; }
-        //public static Dictionary<Guid, MapHandler> MapDictionary;
         private static World _world;
 
         static void Main(string[] args)
@@ -46,15 +43,18 @@ namespace GloriousConsoleAdventure
             _world = new World { WhereAmI = new Coordinate(0, 0), MapGrid = new Dictionary<Coordinate, Map>() };
             _world.MapGrid.Add(new Coordinate(0, 0), _currentMap);
 
-
+            //Generate one exit in each direction
             MapHandler.GenerateExit(Direction.North, _currentMap);
             MapHandler.GenerateExit(Direction.South, _currentMap);
             MapHandler.GenerateExit(Direction.East, _currentMap);
             MapHandler.GenerateExit(Direction.West, _currentMap);
 
-            //_currentMap = MapHandler.GenerateRandomExits(_currentMap, 4);
+            //Draw the map
             TheCartographer.DrawThisMapPlease(_currentMap, Hero, _world);
+            //Let's get it on!
             InitGame(MapHandler.GetValidStartLocation(15, 15, _currentMap));
+
+            //Main loop. Check if arrow keys are pressed and move accordingly.
             ConsoleKeyInfo keyInfo;
             while ((keyInfo = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {
@@ -196,6 +196,11 @@ namespace GloriousConsoleAdventure
             ActionMenu.RenderMenu(Hero, _world);
         }
 
+        /// <summary>
+        /// Generates the next map and sets it to current map.
+        /// </summary>
+        /// <param name="coordinate">Co-ordinates where the new map should be placed</param>
+        /// <param name="exitDirection">Where does the hero come from</param>
         private static void GenerateNextMap(Coordinate coordinate, Direction exitDirection)
         {
             var nextmap = MapHandler.CreateMap(MapWidth, MapHeight, 40, RandomBlockConfiguration);
@@ -234,6 +239,7 @@ namespace GloriousConsoleAdventure
             }
 
         }
+        
         /// <summary>
         /// Overpaint the old hero
         /// </summary>
@@ -241,6 +247,7 @@ namespace GloriousConsoleAdventure
         {
             TheArtist.Delete(Hero.Coordinates);
         }
+        
         /// <summary>
         /// Make sure that the new coordinate is not placed outside the
         /// console window (since that will cause a runtime crash
@@ -256,11 +263,12 @@ namespace GloriousConsoleAdventure
 
             return true;
         }
+       
         /// <summary>
         /// Initiates the game by painting the background
         /// and initiating the hero
         /// </summary>
-        static void InitGame(int[] startPosition = null)
+        static void InitGame(IReadOnlyList<int> startPosition = null)
         {
             //If we don't have a start position default to 0,0
             if (startPosition == null)
