@@ -111,14 +111,14 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="exittingMap">Map to clone from</param>
         /// <param name="exitDirection">Direction from which we came</param>
         /// <param name="map">Map to update</param>
-        public static void CloneExit(Block[,] exittingMap, Direction exitDirection, Map map)
+        public static void CloneExit(Map exittingMap, Direction exitDirection, Map map)
         {
             switch (exitDirection)
             {
                 case Direction.North:
                     for (int i = 0; i < map.MapWidth - 1; i++)
                     {
-                        map.MapBlocks[i, map.MapHeight - 1] = exittingMap[i, 0];
+                        map.MapBlocks[i, map.MapHeight - 1] = exittingMap.MapBlocks[i, 0];
                         if (map.MapBlocks[i, map.MapHeight - 1] == Block.EmptySpace)
                         {
                             var b = 2;
@@ -133,7 +133,7 @@ namespace GloriousConsoleAdventure.Mapping
                 case Direction.South:
                     for (int i = 0; i < map.MapWidth; i++)
                     {
-                        map.MapBlocks[i, 0] = exittingMap[i, map.MapHeight - 1];
+                        map.MapBlocks[i, 0] = exittingMap.MapBlocks[i, map.MapHeight - 1];
                         //if the block below is a wall, remove it to make way, should perhaps check one or two tiles more
                         if (map.MapBlocks[i, 0] == Block.EmptySpace)
                         {
@@ -151,7 +151,7 @@ namespace GloriousConsoleAdventure.Mapping
                     for (var y = 0; y < map.MapHeight; y++)
                     {
                         //Map exit from exitmap
-                        map.MapBlocks[0, y] = exittingMap[map.MapWidth - 1, y];
+                        map.MapBlocks[0, y] = exittingMap.MapBlocks[map.MapWidth - 1, y];
                         //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
                         if (map.MapBlocks[0, y] == Block.EmptySpace)
                         {
@@ -169,7 +169,7 @@ namespace GloriousConsoleAdventure.Mapping
                     for (var y = 0; y < map.MapHeight; y++)
                     {
                         //Map exit from exitmap
-                        map.MapBlocks[map.MapWidth - 1, y] = exittingMap[0, y];
+                        map.MapBlocks[map.MapWidth - 1, y] = exittingMap.MapBlocks[0, y];
                         //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
                         if (map.MapBlocks[map.MapWidth - 1, y] == Block.EmptySpace)
                         {

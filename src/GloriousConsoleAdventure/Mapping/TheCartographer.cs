@@ -13,22 +13,38 @@ namespace GloriousConsoleAdventure.Mapping
 {
     public static class TheCartographer
     {
-
-        public static void CloneExitsAndDrawThisMapPlease(Map map, Block[,] exitMap, Direction exitDirection, Hero hero, World world)
+        /// <summary>
+        /// CLones the exit from provided map and renders game 
+        /// </summary>
+        /// <param name="map">Map to draw</param>
+        /// <param name="exitMap">Map from where we came</param>
+        /// <param name="exitDirection">The direction to generate the exit</param>
+        /// <param name="hero">Hero to render</param>
+        /// <param name="world">World to render</param>
+        public static void CloneExitsAndDrawThisMapPlease(Map map, Map exitMap, Direction exitDirection, Hero hero, World world)
         {
             MapHandler.CloneExit(exitMap, exitDirection, map);
-            DrawThisMapPlease(map, hero, world);
+            DrawGame(map, hero, world);
         }
 
-        public static void DrawThisMapPlease(Map map, Hero hero, World world)
+        /// <summary>
+        /// Draws the entire game screen
+        /// </summary>
+        /// <param name="map">Map to draw</param>
+        /// <param name="hero">Hero to draw</param>
+        /// <param name="world">World to draw</param>
+        public static void DrawGame(Map map, Hero hero, World world)
         {
-
             Console.Clear();
             Console.Write(MapToString(map));
             DrawActionBlocks(map);
             ActionMenu.RenderMenu(hero, world);
         }
 
+        /// <summary>
+        /// Draw the different action blocks
+        /// </summary>
+        /// <param name="map">The map we want to draw the blocks on</param>
         private static void DrawActionBlocks(Map map)
         {
             foreach (var tile in map.ActionBlocks)
@@ -36,7 +52,13 @@ namespace GloriousConsoleAdventure.Mapping
                 TheArtist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
             }
         }
-
+        
+        /// <summary>
+        /// Renders the provided map to a string
+        /// </summary>
+        /// <param name="map">Map to render</param>
+        /// <param name="debug">isDebug?</param>
+        /// <returns>Map as string</returns>
         private static string MapToString(Map map, bool debug = false)
         {
             TheArtist.SetPalette(map.MapPalette);
