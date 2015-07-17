@@ -93,26 +93,22 @@ namespace GloriousConsoleAdventure
 
             if (MapHandler.IsMapExit(heroCoordinate.X, heroCoordinate.Y, _currentMap))
             {
-                var exitDirection = Direction.North;
                 var entryDirection = Direction.South;
                 //If X is 0 we go west
                 if (heroCoordinate.X == 0)
                 {
-                    exitDirection = Direction.West;
                     entryDirection = Direction.East;
                     heroCoordinate.X = MapWidth - 1;
                 }
                 //If Y is 0 we go North
                 if (heroCoordinate.Y == 0)
                 {
-                    exitDirection = Direction.North;
                     entryDirection = Direction.South;
                     heroCoordinate.Y = MapHeight - 1;
                 }
                 //If x is the width of the map we go east
                 if (heroCoordinate.X == _currentMap.MapWidth)
                 {
-                    exitDirection = Direction.East;
                     entryDirection = Direction.West;
                     heroCoordinate.X = 1;
                 }
@@ -134,7 +130,7 @@ namespace GloriousConsoleAdventure
                         }
                         else
                         {
-                            GenerateNextMap(coordinate, Direction.South);
+                            GenerateNextMap(coordinate);
                         }
                         break;
                     case Direction.South:
@@ -146,7 +142,7 @@ namespace GloriousConsoleAdventure
                         }
                         else
                         {
-                            GenerateNextMap(coordinate, Direction.North);
+                            GenerateNextMap(coordinate);
                         }
                         break;
                     case Direction.East:
@@ -158,7 +154,7 @@ namespace GloriousConsoleAdventure
                         }
                         else
                         {
-                            GenerateNextMap(coordinate, Direction.West);
+                            GenerateNextMap(coordinate);
                         }
                         break;
                     case Direction.West:
@@ -170,7 +166,7 @@ namespace GloriousConsoleAdventure
                         }
                         else
                         {
-                            GenerateNextMap(coordinate, Direction.East);
+                            GenerateNextMap(coordinate);
                         }
 
                         break;
@@ -201,11 +197,12 @@ namespace GloriousConsoleAdventure
         /// </summary>
         /// <param name="coordinate">Co-ordinates where the new map should be placed</param>
         /// <param name="exitDirection">Where does the hero come from</param>
-        private static void GenerateNextMap(Coordinate coordinate, Direction exitDirection)
+        private static void GenerateNextMap(Coordinate coordinate)
         {
             var nextmap = MapHandler.CreateMap(MapWidth, MapHeight, 40, RandomBlockConfiguration);
             MapHandler.GenerateRandomExitDirection(nextmap, 1);
-            TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, _currentMap, exitDirection, Hero, _world);
+            var adjacentMaps = _world.GetDestinationsAdjacentMaps(coordinate);
+            TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, adjacentMaps, Hero, _world);
             _world.MapGrid.Add(coordinate, nextmap);
             //Set current map to the next
             _currentMap = nextmap;

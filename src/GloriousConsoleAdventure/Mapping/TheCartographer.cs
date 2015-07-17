@@ -24,9 +24,12 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="exitDirection">The direction to generate the exit</param>
         /// <param name="hero">Hero to render</param>
         /// <param name="world">World to render</param>
-        public static void CloneExitsAndDrawThisMapPlease(Map map, Map exitMap, Direction exitDirection, Hero hero, World world)
+        public static void CloneExitsAndDrawThisMapPlease(Map map, Dictionary<Direction, Map> adjactenMaps, Hero hero, World world)
         {
-            MapHandler.CloneExit(exitMap, exitDirection, map);
+            foreach (var adjacentMap in adjactenMaps)
+            {
+                MapHandler.CloneExit(adjacentMap.Value, adjacentMap.Key, map);
+            }
             DrawGame(map, hero, world);
         }
 

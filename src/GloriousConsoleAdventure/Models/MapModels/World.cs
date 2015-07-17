@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using GloriousConsoleAdventure.Enums;
 
 namespace GloriousConsoleAdventure.Models.MapModels
 {
@@ -16,5 +18,33 @@ namespace GloriousConsoleAdventure.Models.MapModels
         /// Where am I in this vast world!?!
         /// </summary>
         public Coordinate WhereAmI { get; set; }
+
+        public Dictionary<Direction, Map> GetDestinationsAdjacentMaps(Coordinate goingTo)
+        {
+            var result = new Dictionary<Direction, Map>();
+            Coordinate destinationCoordinate;
+            //North
+            destinationCoordinate = new Coordinate(goingTo.X, goingTo.Y + 1);
+            if (MapGrid.ContainsKey(destinationCoordinate))
+                result.Add(Direction.North, MapGrid[destinationCoordinate]);
+
+            //South
+            destinationCoordinate = new Coordinate(goingTo.X, goingTo.Y - 1);
+            if (MapGrid.ContainsKey(destinationCoordinate))
+                result.Add(Direction.South, MapGrid[destinationCoordinate]);
+
+            //East
+            destinationCoordinate = new Coordinate(goingTo.X + 1, goingTo.Y);
+            if (MapGrid.ContainsKey(destinationCoordinate))
+                result.Add(Direction.East, MapGrid[destinationCoordinate]);
+
+            //West
+            destinationCoordinate = new Coordinate(goingTo.X - 1, goingTo.Y);
+            if (MapGrid.ContainsKey(destinationCoordinate))
+                result.Add(Direction.West, MapGrid[destinationCoordinate]);
+
+            return result;
+        }
+
     }
 }

@@ -16,6 +16,12 @@ namespace GloriousConsoleAdventure.Models.MapModels
         public int MapHeight { get; set; }
         public Palettes MapPalette { get; set; }
         public List<BlockTile> ActionBlocks { get; set; }
+        public Dictionary<Direction, Coordinate> Exits { get; set; }
         public  int WallPercentage { get; set; }
+
+        public Map()
+        {
+            Exits = new Dictionary<Direction, Coordinate>();
+        }
     }
 }

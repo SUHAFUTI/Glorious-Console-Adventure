@@ -116,32 +116,40 @@ namespace GloriousConsoleAdventure.Mapping
             switch (exitDirection)
             {
                 case Direction.North:
-                    for (int i = 0; i < map.MapWidth - 1; i++)
+                    for (int x = 0; x < map.MapWidth - 1; x++)
                     {
-                        map.MapBlocks[i, map.MapHeight - 1] = exittingMap.MapBlocks[i, 0];
-                        if (map.MapBlocks[i, map.MapHeight - 1] == Block.EmptySpace)
+                        map.MapBlocks[x, map.MapHeight - 1] = exittingMap.MapBlocks[x, 0];
+                        if (map.MapBlocks[x, map.MapHeight - 1] == Block.EmptySpace)
                         {
+                            //Register exit in new map, is in opposite direction.
+                            if (!map.Exits.ContainsKey(Direction.South))
+                                map.Exits.Add(Direction.South, new Coordinate(x, map.MapHeight - 1));
+
                             var b = 2;
                             //Keep excavating until we hit EmptySpace to ensure an exit
-                            while (map.MapBlocks[i, map.MapHeight - b] == Block.Wall)
+                            while (map.MapBlocks[x, map.MapHeight - b] == Block.Wall)
                             {
-                                map.MapBlocks[i, map.MapHeight - b++] = Block.EmptySpace;
+                                map.MapBlocks[x, map.MapHeight - b++] = Block.EmptySpace;
                             }
                         }
                     }
                     break;
                 case Direction.South:
-                    for (int i = 0; i < map.MapWidth; i++)
+                    for (int x = 0; x < map.MapWidth; x++)
                     {
-                        map.MapBlocks[i, 0] = exittingMap.MapBlocks[i, map.MapHeight - 1];
+                        map.MapBlocks[x, 0] = exittingMap.MapBlocks[x, map.MapHeight - 1];
                         //if the block below is a wall, remove it to make way, should perhaps check one or two tiles more
-                        if (map.MapBlocks[i, 0] == Block.EmptySpace)
+                        if (map.MapBlocks[x, 0] == Block.EmptySpace)
                         {
+                            //Register exit in new map, is in opposite direction.
+                            if (!map.Exits.ContainsKey(Direction.North))
+                                map.Exits.Add(Direction.North, new Coordinate(x, 0));
+
                             var b = 1;
                             //Keep excavating until we hit EmptySpace to ensure an exit
-                            while (map.MapBlocks[i, b] == Block.Wall)
+                            while (map.MapBlocks[x, b] == Block.Wall)
                             {
-                                map.MapBlocks[i, b++] = Block.EmptySpace;
+                                map.MapBlocks[x, b++] = Block.EmptySpace;
                             }
                         }
                     }
@@ -155,6 +163,10 @@ namespace GloriousConsoleAdventure.Mapping
                         //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
                         if (map.MapBlocks[0, y] == Block.EmptySpace)
                         {
+                            //Register exit in new map, is in opposite direction.
+                            if (!map.Exits.ContainsKey(Direction.West))
+                                map.Exits.Add(Direction.West, new Coordinate(0, y));
+
                             var b = 1;
                             //Keep excavating until we hit EmptySpace to ensure an exit
                             while (map.MapBlocks[b, y] == Block.Wall)
@@ -173,6 +185,10 @@ namespace GloriousConsoleAdventure.Mapping
                         //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
                         if (map.MapBlocks[map.MapWidth - 1, y] == Block.EmptySpace)
                         {
+                            //Register exit in new map, is in opposite direction.
+                            if (!map.Exits.ContainsKey(Direction.East))
+                                map.Exits.Add(Direction.East, new Coordinate(map.MapWidth - 1, y));
+
                             var b = 2;
                             //Keep excavating until we hit EmptySpace to ensure an exit
                             while (map.MapBlocks[map.MapWidth - b, y] == Block.Wall)
@@ -216,6 +232,7 @@ namespace GloriousConsoleAdventure.Mapping
                                 }
                                 //Let the column loop know we found an exit
                                 foundExit = true;
+                                map.Exits.Add(direction, new Coordinate(x, y));
                             }
                         }
                     }
@@ -241,6 +258,7 @@ namespace GloriousConsoleAdventure.Mapping
                                 }
                                 //Let the column loop know we found an exit
                                 foundExit = true;
+                                map.Exits.Add(direction, new Coordinate(x, y));
                             }
                         }
                     }
@@ -266,6 +284,7 @@ namespace GloriousConsoleAdventure.Mapping
                                 }
                                 //Let the column loop know we found an exit
                                 foundExit = true;
+                                map.Exits.Add(direction, new Coordinate(x, y));
                             }
                         }
                     }
@@ -291,6 +310,7 @@ namespace GloriousConsoleAdventure.Mapping
                                 }
                                 //Let the column loop know we found an exit
                                 foundExit = true;
+                                map.Exits.Add(direction, new Coordinate(x, y));
                             }
                         }
                     }
@@ -305,12 +325,23 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="exits">Amount of exits</param>
         public static void GenerateRandomExitDirection(Map map, int exits)
         {
-            for (var i = 0; i <= exits; i++)
+            var usedExits = new List<Direction>();
+            var values = Enum.GetValues(typeof(Direction));
+            Direction exit = Direction.North;
+            var i = 0;
+
+            while (i < exits)
             {
-                var values = Enum.GetValues(typeof(Direction));
-                var exit = (Direction)values.GetValue(MagicNumberHat.Random.Next(values.Length));
+                do
+                {
+                    exit = (Direction)values.GetValue(MagicNumberHat.Random.Next(values.Length));
+
+                } while (usedExits.Contains(exit));
                 GenerateExit(exit, map);
+                i++;
             }
+
+
         }
 
         /// <summary>
