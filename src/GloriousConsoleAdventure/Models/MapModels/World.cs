@@ -23,15 +23,15 @@ namespace GloriousConsoleAdventure.Models.MapModels
         {
             var result = new Dictionary<Direction, Map>();
             Coordinate destinationCoordinate;
-            //North
+            //South
             destinationCoordinate = new Coordinate(goingTo.X, goingTo.Y + 1);
             if (MapGrid.ContainsKey(destinationCoordinate))
-                result.Add(Direction.North, MapGrid[destinationCoordinate]);
+                result.Add(Direction.South, MapGrid[destinationCoordinate]);
 
-            //South
+            //North
             destinationCoordinate = new Coordinate(goingTo.X, goingTo.Y - 1);
             if (MapGrid.ContainsKey(destinationCoordinate))
-                result.Add(Direction.South, MapGrid[destinationCoordinate]);
+                result.Add(Direction.North, MapGrid[destinationCoordinate]);
 
             //East
             destinationCoordinate = new Coordinate(goingTo.X + 1, goingTo.Y);
