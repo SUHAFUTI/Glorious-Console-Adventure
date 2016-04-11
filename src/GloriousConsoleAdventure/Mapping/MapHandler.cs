@@ -127,6 +127,7 @@ namespace GloriousConsoleAdventure.Mapping
 
                             var b = 2;
                             //Keep excavating until we hit EmptySpace to ensure an exit
+                            //TODO: Needs to be smarter, sometimes hits a 1,1 hole and is happy. Not a real exit
                             while (map.MapBlocks[x, map.MapHeight - b] == Block.Wall)
                             {
                                 map.MapBlocks[x, map.MapHeight - b++] = Block.EmptySpace;
@@ -147,6 +148,7 @@ namespace GloriousConsoleAdventure.Mapping
 
                             var b = 1;
                             //Keep excavating until we hit EmptySpace to ensure an exit
+                            //TODO: Needs to be smarter, sometimes hits a 1,1 hole and is happy. Not a real exit
                             while (map.MapBlocks[x, b] == Block.Wall)
                             {
                                 map.MapBlocks[x, b++] = Block.EmptySpace;
@@ -169,6 +171,7 @@ namespace GloriousConsoleAdventure.Mapping
 
                             var b = 1;
                             //Keep excavating until we hit EmptySpace to ensure an exit
+                            //TODO: Needs to be smarter, sometimes hits a 1,1 hole and is happy. Not a real exit
                             while (map.MapBlocks[b, y] == Block.Wall)
                             {
                                 map.MapBlocks[b++, y] = Block.EmptySpace;
@@ -191,6 +194,7 @@ namespace GloriousConsoleAdventure.Mapping
 
                             var b = 2;
                             //Keep excavating until we hit EmptySpace to ensure an exit
+                            //TODO: Needs to be smarter, sometimes hits a 1,1 hole and is happy. Not a real exit
                             while (map.MapBlocks[map.MapWidth - b, y] == Block.Wall)
                             {
                                 map.MapBlocks[map.MapWidth - b++, y] = Block.EmptySpace;
@@ -436,9 +440,11 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="map">Map to set coordinates on</param>
-        public void ClearBlock(int x, int y, Map map)
+        public void ClearBlock(Coordinate coordinate, Map map)
         {
-            map.MapBlocks[x, y] = Block.EmptySpace;
+            var removeBlock = map.ActionBlocks.First(b => b.Coordinate.Equals(coordinate));
+            map.ActionBlocks.Remove(removeBlock);
+            map.MapBlocks[coordinate.X, coordinate.Y] = Block.EmptySpace;
         }
 
         /// <summary>

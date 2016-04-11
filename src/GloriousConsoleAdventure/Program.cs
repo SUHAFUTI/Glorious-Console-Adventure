@@ -223,14 +223,14 @@ namespace GloriousConsoleAdventure
                     var coinPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Coin + ".wav";
                     var coinPlayer = new System.Media.SoundPlayer(coinPath);
                     coinPlayer.Play();
-                    MapHandler.ClearBlock(coordinate.X, coordinate.Y, map);
+                    MapHandler.ClearBlock(coordinate, map);
                     Hero.Coins++;
                     break;
                 case Block.Teleport:
                     var teleportPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Teleport + ".wav";
                     var teleportPlayer = new System.Media.SoundPlayer(teleportPath);
                     teleportPlayer.Play();
-                    MapHandler.ClearBlock(coordinate.X, coordinate.Y, map);
+                    //MapHandler.ClearBlock(coordinate, map); //No need to clear.
                     //TODO teleport
                     break;
             }
