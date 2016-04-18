@@ -230,13 +230,19 @@ namespace GloriousConsoleAdventure
                     var teleportPath = AppDomain.CurrentDomain.BaseDirectory + "audio\\" + Block.Teleport + ".wav";
                     var teleportPlayer = new System.Media.SoundPlayer(teleportPath);
                     teleportPlayer.Play();
-                    //MapHandler.ClearBlock(coordinate, map); //No need to clear.
-                    //TODO teleport
+                    //Now we know where to move the bastard
+                    var tp = map.ActionBlocks.FirstOrDefault(a => a.Block == Block.Teleport && !a.Coordinate.Equals(coordinate));
+                    //move Hero and repaint. 
+                    //Todo this is gonna be affected by moverefactoring. 
+                    RemoveHero();
+                    TheArtist.Paint(Palettes.Hero, tp.Coordinate, " ");
+                    Hero.Coordinates = tp.Coordinate;
+
                     break;
             }
 
         }
-        
+
         /// <summary>
         /// Overpaint the old hero
         /// </summary>
@@ -244,7 +250,7 @@ namespace GloriousConsoleAdventure
         {
             TheArtist.Delete(Hero.Coordinates);
         }
-        
+
         /// <summary>
         /// Make sure that the new coordinate is not placed outside the
         /// console window (since that will cause a runtime crash
@@ -260,7 +266,7 @@ namespace GloriousConsoleAdventure
 
             return true;
         }
-       
+
         /// <summary>
         /// Initiates the game by painting the background
         /// and initiating the hero
