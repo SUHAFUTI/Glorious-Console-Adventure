@@ -37,6 +37,13 @@ namespace GloriousConsoleAdventure.Color
             Console.BackgroundColor = background;
         }
 
+        public static void Paint(BlockTile blockTile)
+        {
+            var blockSymbol = Rendering.MapSymbols[blockTile.Block];
+            Paint(blockTile.Palette, blockTile.Coordinate, blockSymbol);
+        }
+
+
         public static void Paint(Palettes palette, Coordinate coordinate, Block block)
         {
             var blockSymbol = Rendering.MapSymbols[block];

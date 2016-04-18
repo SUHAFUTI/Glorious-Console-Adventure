@@ -232,10 +232,8 @@ namespace GloriousConsoleAdventure
                     teleportPlayer.Play();
                     //Now we know where to move the bastard
                     var tp = map.ActionBlocks.FirstOrDefault(a => a.Block == Block.Teleport && !a.Coordinate.Equals(coordinate));
-                    //move Hero and repaint. 
-                    //Todo this is gonna be affected by moverefactoring. 
                     RemoveHero();
-                    TheArtist.Paint(Palettes.Hero, tp.Coordinate, " ");
+                    TheArtist.Paint(Palettes.Hero, tp.Coordinate, Block.EmptySpace);
                     Hero.Coordinates = tp.Coordinate;
                     break;
             }
@@ -243,7 +241,7 @@ namespace GloriousConsoleAdventure
             var heroTeleporter = map.ActionBlocks.FirstOrDefault(a => a.Block == Block.Teleport && a.Coordinate.Equals(Hero.PreviousCoordinate));
             if (heroTeleporter != null)
             {
-                TheArtist.Paint(heroTeleporter.Palette, heroTeleporter.Coordinate, heroTeleporter.Block);
+                TheArtist.Paint(heroTeleporter);
             }
         }
 
