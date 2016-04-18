@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GloriousConsoleAdventure.Enums;
 using GloriousConsoleAdventure.Mapping;
 using GloriousConsoleAdventure.Models.MapModels;
 
@@ -34,6 +35,12 @@ namespace GloriousConsoleAdventure.Color
         {
             Console.ForegroundColor = foreground;
             Console.BackgroundColor = background;
+        }
+
+        public static void Paint(Palettes palette, Coordinate coordinate, Block block)
+        {
+            var blockSymbol = Rendering.MapSymbols[block];
+            Paint(palette, coordinate, blockSymbol);
         }
 
         public static void Paint(Palettes palette, Coordinate coordinate, string symbol)

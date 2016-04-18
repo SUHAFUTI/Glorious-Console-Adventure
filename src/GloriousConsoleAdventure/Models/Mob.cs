@@ -11,8 +11,19 @@ namespace GloriousConsoleAdventure.Models
 {
     public class Mob
     {
+        private Coordinate _coordinate;
         public string Name { get; set; }
-        public Coordinate Coordinates { get; set; }
+
+        public Coordinate Coordinates
+        {
+            get { return _coordinate; }
+            set
+            {
+                if (Coordinates != null) PreviousCoordinate = _coordinate;
+                _coordinate = value;
+            }
+        }
         public Stats Stats { get; set; }
+        public Coordinate PreviousCoordinate { get; private set; }
     }
 }

@@ -237,10 +237,14 @@ namespace GloriousConsoleAdventure
                     RemoveHero();
                     TheArtist.Paint(Palettes.Hero, tp.Coordinate, " ");
                     Hero.Coordinates = tp.Coordinate;
-
                     break;
             }
 
+            var heroTeleporter = map.ActionBlocks.FirstOrDefault(a => a.Block == Block.Teleport && a.Coordinate.Equals(Hero.PreviousCoordinate));
+            if (heroTeleporter != null)
+            {
+                TheArtist.Paint(heroTeleporter.Palette, heroTeleporter.Coordinate, heroTeleporter.Block);
+            }
         }
 
         /// <summary>

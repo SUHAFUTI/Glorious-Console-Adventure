@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GloriousConsoleAdventure.Color.ColorPreset" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Color\ColorPreset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Color.TheArtist" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAAAAAAAAAAEAAABAAAgAAAgIAAA=</HashCode>
+      <FileName>Color\TheArtist.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Helpers.MagicNumberHat" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Helpers\MagicRandomHat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Mapping.MapHandler" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAgAIAAAAEAQABCAAAMATAACgAAAAAAACAQoEAA=</HashCode>
+      <FileName>Mapping\MapHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Mapping.MoveHandler" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAAAAAAgABAAAAAAAVAAAA=</HashCode>
+      <FileName>Mapping\MoveHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Mapping.Rendering" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Mapping\Rendering.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Mapping.TheCartographer" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEABAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Mapping\TheCartographer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Menu.ActionMenu" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Menu\ActionMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Models.Hero.Hero" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Hero\Hero.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Models.MapModels.BlockTile" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAABAAAAAAAACAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\MapModels\BlockTile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Models.MapModels.Coordinate" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAIAAAAAAAAAAYAA=</HashCode>
+      <FileName>Models\MapModels\Coordinate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Models.MapModels.Map" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEhgEBA=</HashCode>
+      <FileName>Models\MapModels\Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Models.MapModels.World" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAABAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Models\MapModels\World.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Models.Mob" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAQAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Mob.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Models.Perk" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Perk.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Models.Stats" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Stats.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GloriousConsoleAdventure.Program" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAABAAAAAQAAAAAAAgIAAQAAABAoAEFA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="GloriousConsoleAdventure.Color.Palettes" Collapsed="true">
+    <Position X="8.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAABIAAAABAAAAAAIAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Color\Palettes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GloriousConsoleAdventure.Enums.Block" Collapsed="true">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAAAAAAAQAAAAABAAAAgA=</HashCode>
+      <FileName>Enums\Block.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GloriousConsoleAdventure.Enums.BlockType" Collapsed="true">
+    <Position X="4.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AhAAAAAAAAAAAAAAAAAAAAAAAABAAAAIAAAAAAABAAA=</HashCode>
+      <FileName>Enums\BlockType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GloriousConsoleAdventure.Enums.Direction" Collapsed="true">
+    <Position X="6.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAABAAQ=</HashCode>
+      <FileName>Enums\Directions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
