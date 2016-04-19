@@ -80,11 +80,11 @@ namespace GloriousConsoleAdventure.Color
             
             Console.SetCursorPosition(coordinate.X, coordinate.Y);
             Console.WriteLine(@"  []___  ");
-            Console.SetCursorPosition(coordinate.X, coordinate.Y-1);
+            Console.SetCursorPosition(coordinate.X, coordinate.Y+1);
             Console.WriteLine(@" /    /\ ");
-            Console.SetCursorPosition(coordinate.X, coordinate.Y-2);
+            Console.SetCursorPosition(coordinate.X, coordinate.Y+2);
             Console.WriteLine(@"/____/__\");
-            Console.SetCursorPosition(coordinate.X, coordinate.Y-3);
+            Console.SetCursorPosition(coordinate.X, coordinate.Y+3);
             Console.WriteLine(@"|[][]||||");
 
         }

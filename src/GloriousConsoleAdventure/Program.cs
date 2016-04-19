@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
+using GloriousConsoleAdventure.Helpers;
 using GloriousConsoleAdventure.Mapping;
 using GloriousConsoleAdventure.Menu;
 using GloriousConsoleAdventure.Models.Hero;
@@ -221,7 +222,8 @@ namespace GloriousConsoleAdventure
             var adjacentMaps = _world.GetDestinationsAdjacentMaps(coordinate);
             TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, adjacentMaps, Hero, _world);
             _world.MapGrid.Add(coordinate, nextmap);
-            
+            var houseSpot = MapHandler.GetValidStartLocation(MagicNumberHat.Random.Next(10, 17), MagicNumberHat.Random.Next(12, 17), nextmap);
+            TheArtist.DrawHouse(new Coordinate(houseSpot[0], houseSpot[1]),nextmap);
             //Set current map to the next
             _currentMap = nextmap;
         }

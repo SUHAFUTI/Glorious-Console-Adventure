@@ -55,10 +55,11 @@ namespace GloriousConsoleAdventure.Mapping
         {
             foreach (var tile in map.ActionBlocks)
             {
-                TheArtist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
+                if (tile.Block != Block.Impenetrable)
+                    TheArtist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
             }
         }
-        
+
         /// <summary>
         /// Renders the provided map to a string
         /// </summary>
