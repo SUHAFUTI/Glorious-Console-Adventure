@@ -85,7 +85,7 @@ namespace GloriousConsoleAdventure.Mapping
             {
                 for (column = 0; column < map.MapWidth; column++)
                 {
-                    returnString.Append(Rendering.MapSymbols[map.MapBlocks[column, row]]);
+                    returnString.Append(Rendering.MapSymbols[map.MapBlocks[column, row].Block]);
                 }
                 returnString.Append(Environment.NewLine);
             }

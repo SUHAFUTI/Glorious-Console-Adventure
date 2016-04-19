@@ -78,20 +78,20 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="y">y coordinate</param>
         /// <param name="map">Map to run the rules on</param>
         /// <returns>Which block to place</returns>
-        public Block PlaceWallLogic(int x, int y, Map map)
+        public MapTile PlaceWallLogic(int x, int y, Map map)
         {
             int numWalls = GetAdjacentBlocks(x, y, 1, 1, Block.Wall, map);
 
 
-            if (map.MapBlocks[x, y] == Block.Wall)
+            if (map.MapBlocks[x, y] == new MapTile { Block = Block.Wall })
             {
                 if (numWalls >= 4)
                 {
-                    return Block.Wall;
+                    return new MapTile { Block = Block.Wall };
                 }
                 if (numWalls < 2)
                 {
-                    return Block.EmptySpace;
+                    return new MapTile { Block = Block.EmptySpace };
                 }
 
             }
@@ -99,10 +99,10 @@ namespace GloriousConsoleAdventure.Mapping
             {
                 if (numWalls >= 5)
                 {
-                    return Block.Wall;
+                    return new MapTile { Block = Block.Wall };
                 }
             }
-            return Block.EmptySpace;
+            return new MapTile { Block = Block.EmptySpace };
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace GloriousConsoleAdventure.Mapping
                     for (int x = 0; x < map.MapWidth - 1; x++)
                     {
                         map.MapBlocks[x, map.MapHeight - 1] = exittingMap.MapBlocks[x, 0];
-                        if (map.MapBlocks[x, map.MapHeight - 1] == Block.EmptySpace)
+                        if (map.MapBlocks[x, map.MapHeight - 1].Block == Block.EmptySpace)
                         {
                             //Register exit in new map, is in opposite direction.
                             if (!map.Exits.ContainsKey(Direction.South))
@@ -128,9 +128,9 @@ namespace GloriousConsoleAdventure.Mapping
                             var b = 2;
                             //Keep excavating until we hit EmptySpace to ensure an exit
                             //TODO: Needs to be smarter, sometimes hits a 1,1 hole and is happy. Not a real exit
-                            while (map.MapBlocks[x, map.MapHeight - b] == Block.Wall)
+                            while (map.MapBlocks[x, map.MapHeight - b].Block == Block.Wall)
                             {
-                                map.MapBlocks[x, map.MapHeight - b++] = Block.EmptySpace;
+                                map.MapBlocks[x, map.MapHeight - b++].Block = Block.EmptySpace;
                             }
                         }
                     }
@@ -140,7 +140,7 @@ namespace GloriousConsoleAdventure.Mapping
                     {
                         map.MapBlocks[x, 0] = exittingMap.MapBlocks[x, map.MapHeight - 1];
                         //if the block below is a wall, remove it to make way, should perhaps check one or two tiles more
-                        if (map.MapBlocks[x, 0] == Block.EmptySpace)
+                        if (map.MapBlocks[x, 0].Block == Block.EmptySpace)
                         {
                             //Register exit in new map, is in opposite direction.
                             if (!map.Exits.ContainsKey(Direction.North))
@@ -149,9 +149,9 @@ namespace GloriousConsoleAdventure.Mapping
                             var b = 1;
                             //Keep excavating until we hit EmptySpace to ensure an exit
                             //TODO: Needs to be smarter, sometimes hits a 1,1 hole and is happy. Not a real exit
-                            while (map.MapBlocks[x, b] == Block.Wall)
+                            while (map.MapBlocks[x, b].Block == Block.Wall)
                             {
-                                map.MapBlocks[x, b++] = Block.EmptySpace;
+                                map.MapBlocks[x, b++].Block = Block.EmptySpace;
                             }
                         }
                     }
@@ -163,7 +163,7 @@ namespace GloriousConsoleAdventure.Mapping
                         //Map exit from exitmap
                         map.MapBlocks[0, y] = exittingMap.MapBlocks[map.MapWidth - 1, y];
                         //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
-                        if (map.MapBlocks[0, y] == Block.EmptySpace)
+                        if (map.MapBlocks[0, y].Block == Block.EmptySpace)
                         {
                             //Register exit in new map, is in opposite direction.
                             if (!map.Exits.ContainsKey(Direction.West))
@@ -172,9 +172,9 @@ namespace GloriousConsoleAdventure.Mapping
                             var b = 1;
                             //Keep excavating until we hit EmptySpace to ensure an exit
                             //TODO: Needs to be smarter, sometimes hits a 1,1 hole and is happy. Not a real exit
-                            while (map.MapBlocks[b, y] == Block.Wall)
+                            while (map.MapBlocks[b, y].Block == Block.Wall)
                             {
-                                map.MapBlocks[b++, y] = Block.EmptySpace;
+                                map.MapBlocks[b++, y].Block = Block.EmptySpace;
                             }
                         }
                     }
@@ -186,7 +186,7 @@ namespace GloriousConsoleAdventure.Mapping
                         //Map exit from exitmap
                         map.MapBlocks[map.MapWidth - 1, y] = exittingMap.MapBlocks[0, y];
                         //if the block to the left is a wall, remove it to make way, should perhaps check one or two tiles more
-                        if (map.MapBlocks[map.MapWidth - 1, y] == Block.EmptySpace)
+                        if (map.MapBlocks[map.MapWidth - 1, y].Block == Block.EmptySpace)
                         {
                             //Register exit in new map, is in opposite direction.
                             if (!map.Exits.ContainsKey(Direction.East))
@@ -195,9 +195,9 @@ namespace GloriousConsoleAdventure.Mapping
                             var b = 2;
                             //Keep excavating until we hit EmptySpace to ensure an exit
                             //TODO: Needs to be smarter, sometimes hits a 1,1 hole and is happy. Not a real exit
-                            while (map.MapBlocks[map.MapWidth - b, y] == Block.Wall)
+                            while (map.MapBlocks[map.MapWidth - b, y].Block == Block.Wall)
                             {
-                                map.MapBlocks[map.MapWidth - b++, y] = Block.EmptySpace;
+                                map.MapBlocks[map.MapWidth - b++, y].Block = Block.EmptySpace;
                             }
                         }
                     }
@@ -227,12 +227,12 @@ namespace GloriousConsoleAdventure.Mapping
                             //We only want one exit?
                             if (foundExit) break;
                             //If its empty 
-                            if (map.MapBlocks[x, y] == Block.EmptySpace)
+                            if (map.MapBlocks[x, y] == new MapTile { Block = Block.EmptySpace })
                             {
                                 //Carve exit upwards
                                 for (var i = y; i >= 0; i--)
                                 {
-                                    map.MapBlocks[x, i] = Block.EmptySpace;
+                                    map.MapBlocks[x, i] = new MapTile { Block = Block.EmptySpace };
                                 }
                                 //Let the column loop know we found an exit
                                 foundExit = true;
@@ -253,12 +253,12 @@ namespace GloriousConsoleAdventure.Mapping
                             //We only want one exit?
                             if (foundExit) break;
                             //If its empty 
-                            if (map.MapBlocks[x, y] == Block.EmptySpace)
+                            if (map.MapBlocks[x, y].Block == Block.EmptySpace)
                             {
                                 //Carve exit downwards
                                 for (var i = y; i < map.MapHeight; i++)
                                 {
-                                    map.MapBlocks[x, i] = Block.EmptySpace;
+                                    map.MapBlocks[x, i].Block = Block.EmptySpace;
                                 }
                                 //Let the column loop know we found an exit
                                 foundExit = true;
@@ -279,12 +279,12 @@ namespace GloriousConsoleAdventure.Mapping
                             //We only want one exit?
                             if (foundExit) break;
                             //If its empty 
-                            if (map.MapBlocks[x, y] == Block.EmptySpace)
+                            if (map.MapBlocks[x, y].Block == Block.EmptySpace)
                             {
                                 //Carve exit left
                                 for (var i = x; i >= 0; i--)
                                 {
-                                    map.MapBlocks[i, y] = Block.EmptySpace;
+                                    map.MapBlocks[i, y].Block = Block.EmptySpace;
                                 }
                                 //Let the column loop know we found an exit
                                 foundExit = true;
@@ -305,12 +305,12 @@ namespace GloriousConsoleAdventure.Mapping
                             //We only want one exit?
                             if (foundExit) break;
                             //If its empty 
-                            if (map.MapBlocks[x, y] == Block.EmptySpace)
+                            if (map.MapBlocks[x, y].Block == Block.EmptySpace)
                             {
                                 //Carve exit right
                                 for (var i = x; i <= map.MapWidth - 1; i++)
                                 {
-                                    map.MapBlocks[i, y] = Block.EmptySpace;
+                                    map.MapBlocks[i, y].Block = Block.EmptySpace;
                                 }
                                 //Let the column loop know we found an exit
                                 foundExit = true;
@@ -325,13 +325,13 @@ namespace GloriousConsoleAdventure.Mapping
         public static void BlastCrossBombermanStyle(Coordinate coordinate, Map map)
         {
             if (!map.ActionBlocks.Any(x => Equals(x.Coordinate, new Coordinate(coordinate.X, coordinate.Y + 1))))
-                map.MapBlocks[coordinate.X, coordinate.Y + 1] = Block.EmptySpace;
+                map.MapBlocks[coordinate.X, coordinate.Y + 1].Block = Block.EmptySpace;
             if (!map.ActionBlocks.Any(x => Equals(x.Coordinate, new Coordinate(coordinate.X, coordinate.Y - 1))))
-                map.MapBlocks[coordinate.X, coordinate.Y - 1] = Block.EmptySpace;
+                map.MapBlocks[coordinate.X, coordinate.Y - 1].Block = Block.EmptySpace;
             if (!map.ActionBlocks.Any(x => Equals(x.Coordinate, new Coordinate(coordinate.X + 1, coordinate.Y))))
-                map.MapBlocks[coordinate.X + 1, coordinate.Y] = Block.EmptySpace;
+                map.MapBlocks[coordinate.X + 1, coordinate.Y].Block = Block.EmptySpace;
             if (!map.ActionBlocks.Any(x => Equals(x.Coordinate, new Coordinate(coordinate.X - 1, coordinate.Y))))
-                map.MapBlocks[coordinate.X - 1, coordinate.Y] = Block.EmptySpace;
+                map.MapBlocks[coordinate.X - 1, coordinate.Y].Block = Block.EmptySpace;
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace GloriousConsoleAdventure.Mapping
                 randY = _rand.Next(1, map.MapHeight);
             }
 
-            map.MapBlocks[randX, randY] = block;
+            map.MapBlocks[randX, randY].Block = block;
             Palettes palette;
             Enum.TryParse(block.ToString(), out palette);
 
@@ -424,7 +424,7 @@ namespace GloriousConsoleAdventure.Mapping
                     }
                     else
                     {
-                        if (map.MapBlocks[iX, iY] == block)
+                        if (map.MapBlocks[iX, iY].Block == block)
                         {
                             blockCounter++;
                         }
@@ -443,7 +443,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <returns>blocktype</returns>
         public Block GetCurrentBlock(int x, int y, Map map)
         {
-            return map.MapBlocks[x, y];
+            return map.MapBlocks[x, y].Block;
         }
 
         /// <summary>
@@ -456,7 +456,7 @@ namespace GloriousConsoleAdventure.Mapping
         {
             var removeBlock = map.ActionBlocks.First(b => b.Coordinate.Equals(coordinate));
             map.ActionBlocks.Remove(removeBlock);
-            map.MapBlocks[coordinate.X, coordinate.Y] = Block.EmptySpace;
+            map.MapBlocks[coordinate.X, coordinate.Y].Block = Block.EmptySpace;
         }
 
         /// <summary>
@@ -474,12 +474,12 @@ namespace GloriousConsoleAdventure.Mapping
                 return true;
             }
 
-            if (map.MapBlocks[x, y] == Block.Wall)
+            if (map.MapBlocks[x, y].Block == Block.Wall)
             {
                 return true;
             }
 
-            if (map.MapBlocks[x, y] == Block.EmptySpace)
+            if (map.MapBlocks[x, y].Block == Block.EmptySpace)
             {
                 return false;
             }
@@ -500,7 +500,7 @@ namespace GloriousConsoleAdventure.Mapping
                 //Check if the block actually is empty before deeming it an exit
                 //I'm not sure why this isn't an issue, with max values 
                 if (y == 0 || x == 0)
-                    return map.MapBlocks[x, y] == Block.EmptySpace;
+                    return map.MapBlocks[x, y].Block == Block.EmptySpace;
                 return true;
             }
             return false;
@@ -536,7 +536,7 @@ namespace GloriousConsoleAdventure.Mapping
             {
                 for (column = 0; column < map.MapWidth; column++)
                 {
-                    map.MapBlocks[column, row] = Block.EmptySpace;
+                    map.MapBlocks[column, row].Block = Block.EmptySpace;
                 }
             }
         }
@@ -546,7 +546,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// </summary>
         public void RandomFillMap(Map map, int wallPercent)
         {
-            map.MapBlocks = new Block[map.MapWidth, map.MapHeight];
+            map.MapBlocks = new MapTile[map.MapWidth, map.MapHeight];
 
             int mapMiddle = 0; // Temp variable
             for (int column = 0, row = 0; row < map.MapHeight; row++)
@@ -554,21 +554,22 @@ namespace GloriousConsoleAdventure.Mapping
                 //Border creation
                 for (column = 0; column < map.MapWidth; column++)
                 {
+                    map.MapBlocks[column, row] = new MapTile();
                     if (column == 0)
                     {
-                        map.MapBlocks[column, row] = Block.Wall;
+                        map.MapBlocks[column, row].Block = Block.Wall;
                     }
                     else if (row == 0)
                     {
-                        map.MapBlocks[column, row] = Block.Wall;
+                        map.MapBlocks[column, row].Block = Block.Wall;
                     }
                     else if (column == map.MapWidth - 1)
                     {
-                        map.MapBlocks[column, row] = Block.Wall;
+                        map.MapBlocks[column, row].Block = Block.Wall;
                     }
                     else if (row == map.MapHeight - 1)
                     {
-                        map.MapBlocks[column, row] = Block.Wall;
+                        map.MapBlocks[column, row].Block = Block.Wall;
                     }
                     // Else, fill with a wall a random percent of the time
                     else
@@ -577,7 +578,7 @@ namespace GloriousConsoleAdventure.Mapping
 
                         if (row == mapMiddle)
                         {
-                            map.MapBlocks[column, row] = 0;
+                            map.MapBlocks[column, row].Block = 0;
                         }
                         else
                         {
@@ -593,13 +594,13 @@ namespace GloriousConsoleAdventure.Mapping
         /// </summary>
         /// <param name="percent">How high chance there should be for a wall</param>
         /// <returns>Either a wall or empty</returns>
-        Block RandomPercent(int percent)
+        MapTile RandomPercent(int percent)
         {
             if (percent >= _rand.Next(1, 101))
             {
-                return Block.Wall;
+                return new MapTile { Block = Block.Wall };
             }
-            return Block.EmptySpace;
+            return new MapTile { Block = Block.EmptySpace };
         }
 
         /// <summary>
@@ -615,7 +616,7 @@ namespace GloriousConsoleAdventure.Mapping
             {
                 for (column = y; column < map.MapWidth; column++)
                 {
-                    if (map.MapBlocks[column, row] == 0) return new[] { column, row };
+                    if (map.MapBlocks[column, row].Block == 0) return new[] { column, row };
                 }
             }
             return null;

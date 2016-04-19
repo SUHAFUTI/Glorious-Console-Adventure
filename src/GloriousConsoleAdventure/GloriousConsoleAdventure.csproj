@@ -47,6 +47,7 @@
     <Compile Include="Color\TheArtist.cs" />
     <Compile Include="Models\MapModels\BlockTile.cs" />
     <Compile Include="Models\MapModels\Map.cs" />
+    <Compile Include="Models\MapModels\MapTile.cs" />
     <Compile Include="Models\MapModels\World.cs" />
     <Compile Include="Menu\ActionMenu.cs" />
     <Compile Include="Helpers\MagicRandomHat.cs" />

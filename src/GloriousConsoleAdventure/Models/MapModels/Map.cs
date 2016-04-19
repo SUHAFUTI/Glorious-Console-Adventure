@@ -10,7 +10,7 @@ namespace GloriousConsoleAdventure.Models.MapModels
     /// </summary>
     public class Map
     {
-        public Block[,] MapBlocks { get; set; }
+        public MapTile[,] MapBlocks { get; set; }
         public Guid Id { get; set; }
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
