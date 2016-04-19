@@ -232,9 +232,12 @@ namespace GloriousConsoleAdventure
                     teleportPlayer.Play();
                     //Now we know where to move the bastard
                     var tp = map.ActionBlocks.FirstOrDefault(a => a.Block == Block.Teleport && !a.Coordinate.Equals(coordinate));
-                    RemoveHero();
-                    TheArtist.Paint(Palettes.Hero, tp.Coordinate, Block.EmptySpace);
-                    Hero.Coordinates = tp.Coordinate;
+                    if (tp != null)
+                    {
+                        RemoveHero();
+                        TheArtist.Paint(Palettes.Hero, tp.Coordinate, Block.EmptySpace);
+                        Hero.Coordinates = tp.Coordinate;
+                    }
                     break;
             }
 
