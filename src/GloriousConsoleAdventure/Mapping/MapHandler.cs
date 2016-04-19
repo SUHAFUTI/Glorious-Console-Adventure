@@ -324,10 +324,14 @@ namespace GloriousConsoleAdventure.Mapping
 
         public static void BlastCrossBombermanStyle(Coordinate coordinate, Map map)
         {
-            map.MapBlocks[coordinate.X, coordinate.Y + 1] = Block.EmptySpace;
-            map.MapBlocks[coordinate.X, coordinate.Y - 1] = Block.EmptySpace;
-            map.MapBlocks[coordinate.X + 1, coordinate.Y] = Block.EmptySpace;
-            map.MapBlocks[coordinate.X - 1, coordinate.Y] = Block.EmptySpace;
+            if (!map.ActionBlocks.Any(x => Equals(x.Coordinate, new Coordinate(coordinate.X, coordinate.Y + 1))))
+                map.MapBlocks[coordinate.X, coordinate.Y + 1] = Block.EmptySpace;
+            if (!map.ActionBlocks.Any(x => Equals(x.Coordinate, new Coordinate(coordinate.X, coordinate.Y - 1))))
+                map.MapBlocks[coordinate.X, coordinate.Y - 1] = Block.EmptySpace;
+            if (!map.ActionBlocks.Any(x => Equals(x.Coordinate, new Coordinate(coordinate.X + 1, coordinate.Y))))
+                map.MapBlocks[coordinate.X + 1, coordinate.Y] = Block.EmptySpace;
+            if (!map.ActionBlocks.Any(x => Equals(x.Coordinate, new Coordinate(coordinate.X - 1, coordinate.Y))))
+                map.MapBlocks[coordinate.X - 1, coordinate.Y] = Block.EmptySpace;
         }
 
         /// <summary>

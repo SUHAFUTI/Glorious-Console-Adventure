@@ -62,6 +62,33 @@ namespace GloriousConsoleAdventure.Color
             ResetPalette();
         }
 
+        public static void DrawHouse(Coordinate coordinate, Map map)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    map.ActionBlocks.Add(new BlockTile
+                    {
+                        Block = Block.Impenetrable,
+                        Coordinate = new Coordinate(coordinate.X + j, coordinate.Y + i),
+                        Palette = Palettes.Transparent
+                    });    
+                }
+                    
+            }
+            
+            Console.SetCursorPosition(coordinate.X, coordinate.Y);
+            Console.WriteLine(@"  []___  ");
+            Console.SetCursorPosition(coordinate.X, coordinate.Y-1);
+            Console.WriteLine(@" /    /\ ");
+            Console.SetCursorPosition(coordinate.X, coordinate.Y-2);
+            Console.WriteLine(@"/____/__\");
+            Console.SetCursorPosition(coordinate.X, coordinate.Y-3);
+            Console.WriteLine(@"|[][]||||");
+
+        }
+
         public static void Delete(Coordinate coordinate)
         {
             var retrievedColors = PaletteDictionary[Palettes.Cave];

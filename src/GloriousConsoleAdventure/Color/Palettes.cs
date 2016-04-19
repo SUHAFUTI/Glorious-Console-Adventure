@@ -14,6 +14,7 @@ namespace GloriousConsoleAdventure.Color
         Teleport,
         Grass,
         StatusBar,
-        Menu
+        Menu,
+        Transparent
     }
 }

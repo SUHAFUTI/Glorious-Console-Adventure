@@ -12,5 +12,6 @@ namespace GloriousConsoleAdventure.Enums
         Wall = 1,
         Coin = 2,
         Teleport = 3,
+        Impenetrable = 4
     }
 }

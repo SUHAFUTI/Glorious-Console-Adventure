@@ -221,6 +221,7 @@ namespace GloriousConsoleAdventure
             var adjacentMaps = _world.GetDestinationsAdjacentMaps(coordinate);
             TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, adjacentMaps, Hero, _world);
             _world.MapGrid.Add(coordinate, nextmap);
+            
             //Set current map to the next
             _currentMap = nextmap;
         }
