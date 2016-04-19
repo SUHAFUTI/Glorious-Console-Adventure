@@ -13,6 +13,7 @@ namespace GloriousConsoleAdventure.Color
         Coin,
         Teleport,
         Grass,
+        StatusBar,
         Menu
     }
 }

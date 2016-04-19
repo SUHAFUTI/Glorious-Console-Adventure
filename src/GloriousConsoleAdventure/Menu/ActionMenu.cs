@@ -1,4 +1,5 @@
 ﻿using System;
+using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Models.Hero;
 using GloriousConsoleAdventure.Models.MapModels;
 
@@ -6,6 +7,7 @@ namespace GloriousConsoleAdventure.Menu
 {
     public class ActionMenu
     {
+        public static string Status { get; set; }
         /// <summary>
         /// Renders the action menu on the right
         /// </summary>
@@ -16,6 +18,7 @@ namespace GloriousConsoleAdventure.Menu
             //Todo: We need to move coloring to some global setting
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
+
             //Draw box around menu
             Drawborders(27);
 
@@ -25,7 +28,26 @@ namespace GloriousConsoleAdventure.Menu
 
             //Set cursor to inside the menubox
             Console.SetCursorPosition(46, 4);
+            Console.WriteLine("Dynamite: {0}", hero.Dynamite);
+
+            Console.SetCursorPosition(46, 6);
             Console.WriteLine("Steps taken: {0}", hero.Steps);
+
+            Console.SetCursorPosition(46, 25);
+            TheArtist.SetPalette(Palettes.StatusBar);
+            if (!string.IsNullOrWhiteSpace(Status))
+            {
+                Console.WriteLine("~  {0}  ~", Status);
+                TheArtist.ResetPalette();
+            }
+            else
+            {
+                Console.SetCursorPosition(45, 25);
+                TheArtist.ResetPalette();
+                Console.WriteLine("                              ");
+            }
+
+
 
             if (hero.Coordinates != null)
             {

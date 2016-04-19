@@ -19,7 +19,9 @@ namespace GloriousConsoleAdventure.Color
             { Palettes.Coin, new ColorPreset{ Background = ConsoleColor.Black, Foreground = ConsoleColor.DarkYellow}},
             { Palettes.Teleport, new ColorPreset{ Background = ConsoleColor.Black, Foreground = ConsoleColor.Blue}},
             { Palettes.Menu, new ColorPreset{ Background = ConsoleColor.Black, Foreground = ConsoleColor.DarkRed}},
+            { Palettes.StatusBar, new ColorPreset{ Background = ConsoleColor.Green, Foreground = ConsoleColor.White}},
             { Palettes.Grass, new ColorPreset{ Background = ConsoleColor.DarkGreen, Foreground = ConsoleColor.Green}}
+
         };
         public static void SetPalette(Palettes palette)
         {

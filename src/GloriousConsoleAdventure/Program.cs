@@ -34,6 +34,7 @@ namespace GloriousConsoleAdventure
             Console.CursorVisible = false;
             //Init hero
             Hero = new Hero("Herald Grimrian");
+            Hero.Dynamite = 5;
             //Height has to be 1 more than map
             Console.SetWindowSize(80, 31);
 
@@ -75,6 +76,21 @@ namespace GloriousConsoleAdventure
                     case ConsoleKey.LeftArrow:
                         MoveHero(-1, 0);
                         break;
+                    case ConsoleKey.Delete:
+                        if (Hero.Dynamite > 0)
+                        {
+                            ActionMenu.Status = "KABOOOM!";
+                            Hero.Dynamite--;
+                            MapHandler.BlastCrossBombermanStyle(Hero.Coordinates, _currentMap);
+                            TheCartographer.DrawGame(_currentMap, Hero, _world);
+                            TheArtist.Paint(Palettes.Hero, Hero.Coordinates, Block.EmptySpace);
+                        }
+                        else
+                        {
+                            ActionMenu.Status = "Your spell fizzles";
+                            ActionMenu.RenderMenu(Hero, _world);
+                        }
+                        break;
                 }
             }
         }
@@ -85,6 +101,7 @@ namespace GloriousConsoleAdventure
         /// <param name="y">Move y</param>
         static void MoveHero(int x, int y)
         {
+            ActionMenu.Status = String.Empty;
             var heroCoordinate = new Coordinate()
             {
                 X = Hero.Coordinates.X + x,
