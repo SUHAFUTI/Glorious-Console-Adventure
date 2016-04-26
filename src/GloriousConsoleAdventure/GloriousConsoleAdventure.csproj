@@ -45,6 +45,7 @@
     <Compile Include="Color\ColorPreset.cs" />
     <Compile Include="Color\Palettes.cs" />
     <Compile Include="Color\TheArtist.cs" />
+    <Compile Include="Enums\Interactive.cs" />
     <Compile Include="Models\MapModels\BlockTile.cs" />
     <Compile Include="Models\MapModels\Map.cs" />
     <Compile Include="Models\MapModels\World.cs" />

@@ -68,12 +68,19 @@ namespace GloriousConsoleAdventure.Color
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    map.ActionBlocks.Add(new BlockTile
+                    var blockTile = new BlockTile
                     {
-                        Block = Block.Impenetrable,
+                        Block = Block.Occupied,
                         Coordinate = new Coordinate(coordinate.X + j, coordinate.Y + i),
                         Palette = Palettes.Transparent
-                    });    
+                    };
+                    
+                    if (i == 3 && j > 5 && j < 8)
+                    {
+                        blockTile.Block = Block.Interactive;
+                        blockTile.Interaction = Interaction.DynamiteVendor;
+                    }
+                    map.ActionBlocks.Add(blockTile);
                 }
                     
             }

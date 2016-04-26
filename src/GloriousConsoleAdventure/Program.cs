@@ -207,6 +207,10 @@ namespace GloriousConsoleAdventure
                 Hero.Steps++;
             }
 
+            var actionBlock = _currentMap.GetActionBlock(heroCoordinate);
+            if (actionBlock != null && actionBlock.Block == Block.Interactive)
+                ActionMenu.Status = "INTERACTIVE BLOCK!";
+            
             ActionMenu.RenderMenu(Hero, _world);
         }
 
@@ -282,6 +286,10 @@ namespace GloriousConsoleAdventure
         /// </summary>
         static bool CanMove(Coordinate c, Map map)
         {
+            var actionBlock = map.ActionBlocks.FirstOrDefault(x => x.Coordinate.Equals(c));
+            if (actionBlock != null && (actionBlock.Block == Block.Occupied || actionBlock.Block == Block.Interactive))
+                return false;
+
             if (MapHandler.IsWall(c.X, c.Y, map)) return false;
             if (c.X < 0 || c.X >= Console.WindowWidth)
                 return false;

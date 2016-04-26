@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GloriousConsoleAdventure.Color;
 using GloriousConsoleAdventure.Enums;
 
@@ -23,5 +24,11 @@ namespace GloriousConsoleAdventure.Models.MapModels
         {
             Exits = new Dictionary<Direction, Coordinate>();
         }
+
+        public BlockTile GetActionBlock(Coordinate coordinate)
+        {
+            return ActionBlocks.FirstOrDefault(x => x.Coordinate.Equals(coordinate));
+        }
+
     }
 }
