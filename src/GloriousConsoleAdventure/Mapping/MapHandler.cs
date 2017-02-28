@@ -33,7 +33,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="randomBlocks">Randomblocks to include, default is null</param>
         /// <param name="mapPalette">Palette to use</param>
         /// <returns>Generated map</returns>
-        public Map CreateMap(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null, Palettes mapPalette = Palettes.Cave)
+        public Map CreateMap(int mapWidth, int mapHeight, int percentWalls = 40, List<Block> randomBlocks = null, Palettes mapPalette = Palettes.Cave, bool emptyMap = false)
         {
             var map = new Map
             {
@@ -43,8 +43,13 @@ namespace GloriousConsoleAdventure.Mapping
                 MapPalette = mapPalette,
                 ActionBlocks = new List<BlockTile>()
             };
+            if (emptyMap)
+            {
+                percentWalls = 0;
+            }
             RandomFillMap(map, percentWalls);
-            MakeCaverns(map);
+            if (!emptyMap)
+                MakeCaverns(map);
             if (randomBlocks != null)
             {
                 foreach (var randomBlock in randomBlocks)

@@ -137,12 +137,18 @@ namespace GloriousConsoleAdventure
                     heroCoordinate.Y = 1;
                 }
                 Coordinate coordinate;
+                
                 switch (entryDirection)
                 {
                     case Direction.North:
-                        coordinate = new Coordinate(_world.WhereAmI.X, _world.WhereAmI.Y - 1);
+                        var isChildMap = _currentMap.ParentMap != null && _world.MapGrid.ContainsKey(_currentMap.ParentMap);
+                        coordinate =  isChildMap ? _currentMap.ParentMap : new Coordinate(_world.WhereAmI.X, _world.WhereAmI.Y - 1);
                         if (_world.MapGrid.ContainsKey(coordinate))
                         {
+                            if (isChildMap)
+                            {
+                                //move hero to house entrance.
+                            }
                             _currentMap = _world.MapGrid[coordinate];
                             TheCartographer.DrawGame(_currentMap, Hero, _world);
                         }
@@ -209,8 +215,17 @@ namespace GloriousConsoleAdventure
 
             var actionBlock = _currentMap.GetActionBlock(heroCoordinate);
             if (actionBlock != null && actionBlock.Block == Block.Interactive)
+            {
+                var house = MapHandler.CreateMap(10, 5, 0, null, Palettes.Grass);
+                house.ParentMap = _world.WhereAmI;
+                MapHandler.GenerateExit(Direction.South, house);
+                Hero.Coordinates = house.Exits.First().Value;
+                _currentMap.MapStructures.Add(house);
+                TheCartographer.CloneExitsAndDrawThisMapPlease(house, new Dictionary<Direction, Map>(), Hero, _world);
+                _currentMap = house;
                 ActionMenu.Status = "INTERACTIVE BLOCK!";
-            
+            }
+
             ActionMenu.RenderMenu(Hero, _world);
         }
 
@@ -227,7 +242,7 @@ namespace GloriousConsoleAdventure
             TheCartographer.CloneExitsAndDrawThisMapPlease(nextmap, adjacentMaps, Hero, _world);
             _world.MapGrid.Add(coordinate, nextmap);
             var houseSpot = MapHandler.GetValidStartLocation(MagicNumberHat.Random.Next(10, 17), MagicNumberHat.Random.Next(12, 17), nextmap);
-            TheArtist.DrawHouse(new Coordinate(houseSpot[0], houseSpot[1]),nextmap);
+            TheArtist.DrawHouse(new Coordinate(houseSpot[0], houseSpot[1]), nextmap);
             //Set current map to the next
             _currentMap = nextmap;
         }

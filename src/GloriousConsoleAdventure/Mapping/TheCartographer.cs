@@ -55,7 +55,7 @@ namespace GloriousConsoleAdventure.Mapping
         {
             foreach (var tile in map.ActionBlocks)
             {
-                if (tile.Block != Block.Impenetrable)
+                if (tile.Block != Block.Impenetrable && tile.Block != Block.Occupied && tile.Block != Block.Interactive)
                     TheArtist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
             }
         }

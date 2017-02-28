@@ -19,10 +19,13 @@ namespace GloriousConsoleAdventure.Models.MapModels
         public List<BlockTile> ActionBlocks { get; set; }
         public Dictionary<Direction, Coordinate> Exits { get; set; }
         public  int WallPercentage { get; set; }
+        public List<Map> MapStructures { get; set; }
+        public Coordinate ParentMap { get; set; }
 
         public Map()
         {
             Exits = new Dictionary<Direction, Coordinate>();
+            MapStructures = new List<Map>();
         }
 
         public BlockTile GetActionBlock(Coordinate coordinate)
