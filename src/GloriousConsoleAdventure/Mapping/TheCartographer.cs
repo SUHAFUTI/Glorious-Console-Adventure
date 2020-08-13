@@ -14,8 +14,10 @@ namespace GloriousConsoleAdventure.Mapping
     /// <summary>
     /// Handles map related stuff
     /// </summary>
-    public static class TheCartographer
+    public class TheCartographer
     {
+        TheArtist _artist = new TheArtist();
+        
         /// <summary>
         /// CLones the exit from provided map and renders game 
         /// </summary>
@@ -24,7 +26,8 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="exitDirection">The direction to generate the exit</param>
         /// <param name="hero">Hero to render</param>
         /// <param name="world">World to render</param>
-        public static void CloneExitsAndDrawThisMapPlease(Map map, Dictionary<Direction, Map> adjactenMaps, Hero hero, World world)
+        
+        public void CloneExitsAndDrawThisMapPlease(Map map, Dictionary<Direction, Map> adjactenMaps, Hero hero, World world)
         {
             foreach (var adjacentMap in adjactenMaps)
             {
@@ -39,7 +42,7 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="map">Map to draw</param>
         /// <param name="hero">Hero to draw</param>
         /// <param name="world">World to draw</param>
-        public static void DrawGame(Map map, Hero hero, World world)
+        public void DrawGame(Map map, Hero hero, World world)
         {
             Console.Clear();
             Console.Write(MapToString(map));
@@ -51,12 +54,12 @@ namespace GloriousConsoleAdventure.Mapping
         /// Draw the different action blocks
         /// </summary>
         /// <param name="map">The map we want to draw the blocks on</param>
-        private static void DrawActionBlocks(Map map)
+        private void DrawActionBlocks(Map map)
         {
             foreach (var tile in map.ActionBlocks)
             {
                 if (tile.Block != Block.Impenetrable && tile.Block != Block.Occupied && tile.Block != Block.Interactive)
-                    TheArtist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
+                    _artist.Paint(tile.Palette, tile.Coordinate, Rendering.MapSymbols[tile.Block]);
             }
         }
 
@@ -66,9 +69,9 @@ namespace GloriousConsoleAdventure.Mapping
         /// <param name="map">Map to render</param>
         /// <param name="debug">isDebug?</param>
         /// <returns>Map as string</returns>
-        private static string MapToString(Map map, bool debug = false)
+        private string MapToString(Map map, bool debug = false)
         {
-            TheArtist.SetPalette(map.MapPalette);
+            _artist.SetPalette(map.MapPalette);
             var returnString = new StringBuilder();
             if (debug)
                 returnString.Append(string.Join(" ", // Seperator between each element

@@ -14,10 +14,10 @@ using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure
 {
-    class Program
+    public class Program
     {
-        private const int MapHeight = 30;
-        private const int MapWidth = 40;
+        public const int MapHeight = 30;
+        public const int MapWidth = 40;
         private static readonly List<Block> RandomBlockConfiguration = new List<Block>
         {
             Block.Coin,

@@ -10,7 +10,7 @@ using GloriousConsoleAdventure.Models.MapModels;
 
 namespace GloriousConsoleAdventure.Color
 {
-    public static class TheArtist
+    public class TheArtist
     {
         private static readonly Dictionary<Palettes, ColorPreset> PaletteDictionary = new Dictionary<Palettes, ColorPreset>()
         {
@@ -23,7 +23,7 @@ namespace GloriousConsoleAdventure.Color
             { Palettes.Grass, new ColorPreset{ Background = ConsoleColor.DarkGreen, Foreground = ConsoleColor.Green}}
 
         };
-        public static void SetPalette(Palettes palette)
+        public void SetPalette(Palettes palette)
         {
             var retrievedPalette = PaletteDictionary[palette];
             
@@ -33,26 +33,26 @@ namespace GloriousConsoleAdventure.Color
             Console.ForegroundColor = retrievedPalette.Foreground;
             Console.BackgroundColor = retrievedPalette.Background;
         }
-        public static void SetColor(ConsoleColor foreground, ConsoleColor background)
+        public void SetColor(ConsoleColor foreground, ConsoleColor background)
         {
             Console.ForegroundColor = foreground;
             Console.BackgroundColor = background;
         }
 
-        public static void Paint(BlockTile blockTile)
+        public void Paint(BlockTile blockTile)
         {
             var blockSymbol = Rendering.MapSymbols[blockTile.Block];
             Paint(blockTile.Palette, blockTile.Coordinate, blockSymbol);
         }
 
 
-        public static void Paint(Palettes palette, Coordinate coordinate, Block block)
+        public void Paint(Palettes palette, Coordinate coordinate, Block block)
         {
             var blockSymbol = Rendering.MapSymbols[block];
             Paint(palette, coordinate, blockSymbol);
         }
 
-        public static void Paint(Palettes palette, Coordinate coordinate, string symbol)
+        public void Paint(Palettes palette, Coordinate coordinate, string symbol)
         {
             var retrievedColors = PaletteDictionary[palette];
             if(retrievedColors != null)
@@ -62,7 +62,7 @@ namespace GloriousConsoleAdventure.Color
             ResetPalette();
         }
 
-        public static void DrawHouse(Coordinate coordinate, Map map)
+        public void DrawHouse(Coordinate coordinate, Map map)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -96,7 +96,7 @@ namespace GloriousConsoleAdventure.Color
 
         }
 
-        public static void Delete(Coordinate coordinate)
+        public void Delete(Coordinate coordinate)
         {
             var retrievedColors = PaletteDictionary[Palettes.Cave];
             if (retrievedColors == null)
@@ -108,7 +108,7 @@ namespace GloriousConsoleAdventure.Color
             Console.ResetColor();
         }
 
-        public static void ResetPalette()
+        public void ResetPalette()
         {
             SetPalette(Palettes.Cave);
         }
